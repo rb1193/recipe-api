@@ -1,13 +1,16 @@
-import { Application, NextFunction, Request, Response } from "express";
-import e = require("express");
+import { Application, NextFunction, Request, Response } from "express"
+import e = require("express")
+import { resolve } from "path"
+import { config } from "dotenv"
 
-const app: Application = e();
-const port = 3000;
+config({ path: resolve(__dirname, "../.env") })
 
-app.get('/', (req: Request, res: Response) => res.send("Hello {req.query.name}!"));
+const app: Application = e()
+
+app.get('/', (req: Request, res: Response) => res.send(`Hello ${req.query.name}. This is ${process.env.APP_NAME}`))
 
 app.use(function (req: Request, res: Response, next: NextFunction) {
     res.status(404).send("Page not found")
 })
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(3000)
