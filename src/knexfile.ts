@@ -8,6 +8,7 @@ const knexConfig: {[key: string]: any} = {
         client: "postgresql",
         connection: process.env.DATABASE_URL,
         migrations: {
+            directory: '../migrations',
             extension: 'ts'
         }
     },
@@ -38,3 +39,6 @@ const knexConfig: {[key: string]: any} = {
 }
 
 export default knexConfig
+
+// Export so that ts-node can use the knexfile during migrations
+module.exports = knexConfig

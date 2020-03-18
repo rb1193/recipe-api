@@ -2,9 +2,9 @@ import { Application, NextFunction, Request, Response } from "express"
 import e = require("express")
 import session = require("express-session")
 import { resolve } from "path"
+import { config } from "dotenv"
 import passport from "passport"
 import { Strategy as LocalStrategy } from "passport-local"
-import { config } from "dotenv"
 import { findUser, serializeUser, deserializeUser } from "./Auth/UserProvider"
 import RecipesController from "./Recipes/RecipesController"
 

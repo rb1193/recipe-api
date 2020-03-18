@@ -2,8 +2,8 @@ import * as Knex from "knex";
 
 
 export async function up(knex: Knex): Promise<any> {
-    knex.schema.withSchema('public').hasTable('recipes').then((exists) => {
-        if (exists) throw new Error("Recipes table exists")
+    return await knex.schema.withSchema('public').hasTable('recipes').then((exists) => {
+        if (exists) return// throw new Error("Recipes table exists")
     }).then(() => {
         return knex.schema.withSchema('public').createTable('recipes', (table) => {
             table.increments()
@@ -20,11 +20,11 @@ export async function up(knex: Knex): Promise<any> {
 
 
 export async function down(knex: Knex): Promise<any> {
-    knex.schema.withSchema('public').hasTable('recipes').then((exists) => {
+    return await knex.schema.withSchema('public').hasTable('recipes').then((exists) => {
         if (!exists) throw new Error("Recipes table missing")
     }).then(() => {
         return knex.schema.withSchema('public').table('recipes', function (table) {
-            return table.dropForeign(['user_id'])
+            table.dropForeign(['user_id'])
         })
     }).then(() => {
         return knex.schema.withSchema('public').dropTable('recipes')

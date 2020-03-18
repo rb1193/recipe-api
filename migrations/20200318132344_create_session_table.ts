@@ -2,8 +2,8 @@ import * as Knex from "knex";
 
 
 export async function up(knex: Knex): Promise<any> {
-    knex.schema.withSchema('public').hasTable('session').then((exists) => {
-        if (exists) throw new Error("Sessions table already exists")
+    return await knex.schema.withSchema('public').hasTable('session').then((exists) => {
+        if (exists) return //throw new Error("Session table already exists")
     }).then(() => {
         return knex.schema.withSchema('public').raw(`CREATE TABLE "session" (
             "sid" varchar NOT NULL COLLATE "default",
@@ -20,10 +20,10 @@ export async function up(knex: Knex): Promise<any> {
 
 
 export async function down(knex: Knex): Promise<any> {
-    knex.schema.withSchema('public').hasTable('session').then((exists) => {
-        if (!exists) throw new Error("Sessions table missing")
+    return await knex.schema.withSchema('public').hasTable('session').then((exists) => {
+        if (!exists) throw new Error("Session table missing")
     }).then(() => {
-        knex.schema.withSchema('public').dropTable('session')
+        return knex.schema.withSchema('public').dropTable('session')
     }).then(() => "Session table deleted")
 }
 
