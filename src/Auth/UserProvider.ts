@@ -6,13 +6,9 @@ import { NotFoundError } from "objection"
 export async function findUser(username: string, password: string, done: (error: any, user?: any, options?: IVerifyOptions) => void) {
     try {
         const user = await UserModel.query().findOne('email', '=', username).throwIfNotFound()
-        bcrypt.compare(password, user.password, (err, result) => {
-            if (result === false) {
-                done(null, false, { message: "Invalid credentials" })
-            }
+        const result = await bcrypt.compare(password, user.password)
 
-            done(null, user)
-        })
+        result === false ? done(null, false, { message: "Invalid credentials" }) : done(null, user)
     } catch (err) {
         if (err instanceof NotFoundError) {
             done(null, false, { message: "Invalid credentials" })
