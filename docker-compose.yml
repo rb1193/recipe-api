@@ -6,7 +6,7 @@ services:
     ports:
      - "3000:3000"
      - "9229:9229"
-    depends_on: [database, mail]
+    depends_on: [database, mail, search]
     user: "node"
     volumes:
       - ./:/home/node/app
@@ -33,3 +33,15 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+  search:
+    image: elasticsearch:7.6.1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+volumes:
+  esdata:
