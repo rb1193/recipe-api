@@ -1,11 +1,7 @@
 import { Model } from "objection"
-import Knex from 'knex'
-import knexConfig from '../knexfile'
+import RecipeModel from "../Recipes/RecipeModel"
 
-const knex = Knex(knexConfig[process.env.APP_ENV || 'production'])
-Model.knex(knex)
-
-class UserModel extends Model
+class UserModel extends Model implements Express.User
 {
     static get tableName(): string {
         return 'users'
@@ -29,6 +25,17 @@ class UserModel extends Model
     email!: string
     password!: string
     profile_img_src!: string
+
+    static relationMappings = {
+        recipes: {
+            relation: Model.HasManyRelation,
+            modelClass: RecipeModel,
+            join: {
+                from: 'users.id',
+                to: 'recipes.user_id',
+            }
+        }
+    }
 }
 
 export default UserModel
