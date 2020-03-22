@@ -2,6 +2,7 @@ import { Application, NextFunction, Request, Response } from 'express'
 import e = require('express')
 import session = require('express-session')
 import methodoverride = require('method-override')
+import cors = require('cors')
 import { resolve } from 'path'
 import { config } from 'dotenv'
 import passport from 'passport'
@@ -25,6 +26,7 @@ Model.knex(knex)
 const app: Application = e()
 
 app.use(methodoverride('X-HTTP-Method-Override'))
+app.use(cors({ origin: 'http://localhost:3001' }))
 app.use(e.json())
 app.use(
     session({
@@ -43,11 +45,15 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // Define routes
-app.post('/login', passport.authenticate('local'), function(
-    req: Request,
-    res: Response,
-) {
+app.post('/login', passport.authenticate('local'), (req: Request, res: Response) => {
     res.status(200).json(req.user)
+})
+
+app.get('/user', (req: Request, res: Response) => {
+    if (req.isAuthenticated()) {
+        res.status(200).json(req.user)
+    }
+    res.status(401).end()
 })
 
 app.route('/recipes')

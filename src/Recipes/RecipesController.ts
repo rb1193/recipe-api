@@ -10,18 +10,18 @@ async function list(req: AuthenticatedRequest) {
 }
 
 async function show(req: AuthenticatedRequest) {
-    return await req.user.$relatedQuery<RecipeModel>('recipes').findById(req.params.recipe)
+    return await req.user.$relatedQuery<RecipeModel>('recipes').findById(req.params.recipe).throwIfNotFound()
 }
 
 async function update(req: AuthenticatedRequest) {
     return await req.user.$relatedQuery<RecipeModel>('recipes').updateAndFetchById(
         req.params.recipe,
         req.body
-    )
+    ).throwIfNotFound()
 }
 
 async function remove(req: AuthenticatedRequest) {
-    await req.user.$relatedQuery('recipes').deleteById(req.params.recipe)
+    await req.user.$relatedQuery('recipes').deleteById(req.params.recipe).throwIfNotFound()
 }
 
 const RecipesController = {
