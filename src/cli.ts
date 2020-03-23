@@ -1,16 +1,13 @@
 import commander from 'commander'
-import { resolve } from "path"
-import { config } from "dotenv"
+import Config from './lib/Config'
 import createUserCommand from './Users/Commands/createUserCommand'
+import { createRecipesIndex, deleteRecipesIndex, indexRecipes } from './Recipes/Commands'
 import knexConfig from './knexfile'
 import Knex from 'knex'
 import { Model } from 'objection'
 
-//Load config
-config({ path: resolve(__dirname, "../.env") })
-
 // Configure database and ORM
-const knex = Knex(knexConfig[process.env.APP_ENV || 'production'])
+const knex = Knex(knexConfig[Config.APP_ENV || 'production'])
 Model.knex(knex)
 
 async function main() {
@@ -19,6 +16,18 @@ async function main() {
     program.command('create-user')
         .description('Create the system user for the application')
         .action(createUserCommand)
+
+    program.command('create-recipes-index')
+        .description('Create the recipes search index')
+        .action(createRecipesIndex)
+
+    program.command('delete-recipes-index')
+        .description('Delete the recipes search index')
+        .action(deleteRecipesIndex)
+
+    program.command('index-recipes')
+        .description('Update the search recipes index')
+        .action(indexRecipes)
 
     await program.parseAsync(process.argv)
 }

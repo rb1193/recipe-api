@@ -1,12 +1,10 @@
-import { resolve } from "path"
-import { config } from "dotenv"
+import Config from './lib/Config'
 
-config({ path: resolve(__dirname, "../.env") })
 const knexConfig: {[key: string]: any} = {
 
     development: {
         client: "postgresql",
-        connection: process.env.DATABASE_URL,
+        connection: Config.DATABASE_URL,
         migrations: {
             directory: '../migrations',
             extension: 'ts'
@@ -15,7 +13,7 @@ const knexConfig: {[key: string]: any} = {
 
     staging: {
         client: "postgresql",
-        connection: process.env.DATABASE_URL,
+        connection: Config.DATABASE_URL,
         pool: {
             min: 2,
             max: 10
@@ -27,7 +25,7 @@ const knexConfig: {[key: string]: any} = {
 
     production: {
         client: "postgresql",
-        connection: process.env.DATABASE_URL,
+        connection: Config.DATABASE_URL,
         pool: {
             min: 2,
             max: 10

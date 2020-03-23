@@ -3,8 +3,7 @@ import e = require('express')
 import session = require('express-session')
 import methodoverride = require('method-override')
 import cors = require('cors')
-import { resolve } from 'path'
-import { config } from 'dotenv'
+import Config from './lib/Config'
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { findUser, serializeUser, deserializeUser } from './Auth/UserProvider'
@@ -15,23 +14,20 @@ import asyncProtectedRoute from './lib/asyncProtectedRoute'
 import RecipesController from './Recipes/RecipesController'
 import RecipeModel from './Recipes/RecipeModel'
 
-// Load config
-config({ path: resolve(__dirname, '../.env') })
-
 // Configure database and ORM
-const knex = Knex(knexConfig[process.env.APP_ENV || 'production'])
+const knex = Knex(knexConfig[Config.APP_ENV || 'production'])
 Model.knex(knex)
 
 // Configure application
 const app: Application = e()
 
 app.use(methodoverride('X-HTTP-Method-Override'))
-app.use(cors({ origin: 'http://localhost:3001' }))
+app.use(cors({ origin: 'http://localhost:3001', credentials: true }))
 app.use(e.json())
 app.use(
     session({
         store: new (require('connect-pg-simple')(session))(),
-        secret: process.env.COOKIE_SECRET || 'secret',
+        secret: Config.COOKIE_SECRET || 'secret',
         resave: false,
         saveUninitialized: false,
         cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
@@ -47,7 +43,7 @@ app.use(passport.session())
 // Define routes
 app.options('*', cors())
 
-app.post('/login', passport.authenticate('local'), (req: Request, res: Response) => {
+app.post('/login', passport.authenticate('local', { failWithError: true }), (req: Request, res: Response) => {
     res.status(200).json(req.user)
 })
 
