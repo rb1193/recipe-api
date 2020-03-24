@@ -13,6 +13,7 @@ import { Model } from 'objection'
 import asyncProtectedRoute from './lib/asyncProtectedRoute'
 import RecipesController from './Recipes/RecipesController'
 import RecipeModel from './Recipes/RecipeModel'
+import { PaginatedCollection } from './lib/ApiResource'
 
 // Configure database and ORM
 const knex = Knex(knexConfig[Config.APP_ENV || 'production'])
@@ -56,7 +57,7 @@ app.get('/user', (req: Request, res: Response) => {
 
 app.route('/recipes')
     .post(asyncProtectedRoute<RecipeModel>(RecipesController.store))
-    .get(asyncProtectedRoute<RecipeModel[]>(RecipesController.list))
+    .get(asyncProtectedRoute<PaginatedCollection<RecipeModel>>(RecipesController.list))
 app.route('/recipes/:recipe')
     .get(asyncProtectedRoute<RecipeModel>(RecipesController.show))
     .put(asyncProtectedRoute<RecipeModel>(RecipesController.update))

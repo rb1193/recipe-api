@@ -1,12 +1,19 @@
 import AuthenticatedRequest from "../lib/AuthenticatedRequest"
 import RecipeModel from "./RecipeModel"
+import ApiResource from "../lib/ApiResource"
+import RecipeSearch from "./RecipeSearch"
+import ModelCollection from '../lib/ModelCollection'
 
 async function store(req: AuthenticatedRequest) {
     return await req.user.$relatedQuery<RecipeModel>('recipes').insert(req.body)
 }
 
 async function list(req: AuthenticatedRequest) {
-    return await req.user.$relatedQuery<RecipeModel>('recipes')
+    const hits = await RecipeSearch.byFulltext(req.query.query, req.user)
+    const perPage = 10
+    const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').findByIds(hits.map((hit) => hit.id))
+    const paginatedRecipes = ModelCollection.page(ModelCollection.sortBySearchScore(recipes, hits), perPage, req.query.page)
+    return ApiResource.paginatedCollection<RecipeModel>(paginatedRecipes, perPage, req.query.page)
 }
 
 async function show(req: AuthenticatedRequest) {

@@ -1,5 +1,5 @@
-import { Model, QueryBuilder } from "objection"
-import UserModel from "../Users/UserModel";
+import { Model } from "objection"
+import UserModel from "../Users/UserModel"
 
 class RecipeModel extends Model
 {
@@ -43,7 +43,5 @@ class RecipeModel extends Model
         }
     }
 }
-
-RecipeModel.QueryBuilder = QueryBuilder
 
 export default RecipeModel
