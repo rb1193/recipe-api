@@ -1,4 +1,3 @@
-
 import { SearchHit } from "./SearchClient";
 import { Page, Model } from "objection";
 
