@@ -7,6 +7,10 @@ export default function asyncProtectedRoute<T>(fn: (req: AuthenticatedRequest) =
             res.status(401).end()
             return
         }
-        fn(req).then((value: T) => res.json(value)).catch((err) => next(err))
+
+        fn(req).then((value: T) => {
+            const status = value ? 200 : 204
+            res.status(status).json(value)
+        }).catch((err) => next(err))
     }
 }

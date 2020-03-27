@@ -61,7 +61,7 @@ app.route('/recipes')
 app.route('/recipes/:recipe')
     .get(asyncProtectedRoute<Item<RecipeModel>>(RecipesController.show))
     .put(asyncProtectedRoute<Item<RecipeModel>>(RecipesController.update))
-    .delete(asyncProtectedRoute<void>(RecipesController.remove))
+    .delete(asyncProtectedRoute<null>(RecipesController.remove))
 
 // Fall back to 404 page
 app.use((req: Request, res: Response, next: NextFunction) => {

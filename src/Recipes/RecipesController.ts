@@ -35,6 +35,7 @@ async function update(req: AuthenticatedRequest) {
 async function remove(req: AuthenticatedRequest) {
     const recipeId = await req.user.$relatedQuery('recipes').deleteById(req.params.recipe).throwIfNotFound()
     RecipeEventEmitter.emit('deleted', recipeId)
+    return null
 }
 
 const RecipesController = {
