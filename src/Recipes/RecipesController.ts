@@ -2,10 +2,12 @@ import AuthenticatedRequest from "../lib/AuthenticatedRequest"
 import RecipeModel from "./RecipeModel"
 import ApiResource from "../lib/ApiResource"
 import RecipeSearch from "./RecipeSearch"
+import RecipeEventEmitter from './RecipeEvents'
 import ModelCollection from '../lib/ModelCollection'
 
 async function store(req: AuthenticatedRequest) {
     const recipe = await req.user.$relatedQuery<RecipeModel>('recipes').insert(req.body)
+    RecipeEventEmitter.emit('created', recipe)
     return ApiResource.item(recipe)
 }
 
@@ -26,11 +28,13 @@ async function update(req: AuthenticatedRequest) {
     const recipe = await req.user.$relatedQuery<RecipeModel>('recipes')
         .updateAndFetchById(req.params.recipe, req.body)
         .throwIfNotFound()
+    RecipeEventEmitter.emit('updated', recipe)
     return ApiResource.item(recipe)
 }
 
 async function remove(req: AuthenticatedRequest) {
-    await req.user.$relatedQuery('recipes').deleteById(req.params.recipe).throwIfNotFound()
+    const recipeId = await req.user.$relatedQuery('recipes').deleteById(req.params.recipe).throwIfNotFound()
+    RecipeEventEmitter.emit('deleted', recipeId)
 }
 
 const RecipesController = {

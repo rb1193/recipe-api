@@ -25,6 +25,33 @@ const RecipeSearch = {
             }
         })
         return searchResults.body.hits.hits.map((hit) => ({id: hit._id, score: hit._score}))
+    },
+    index: async(recipe: RecipeModel): Promise<void> => {
+        await SearchClient.index({
+            id: recipe.id.toString(),
+            index: Config.ELASTICSEARCH_RECIPES_INDEX,
+            op_type: 'index',
+            body: {
+                user_id: recipe.user_id,
+                name: recipe.name,
+                description: recipe.description,
+                cooking_time: recipe.cooking_time,
+                ingredients: recipe.ingredients,
+            }
+        })
+    },
+    delete: async(recipeId: number): Promise<void> => {
+        await SearchClient.deleteByQuery({
+            index: Config.ELASTICSEARCH_RECIPES_INDEX,
+            max_docs: 1,
+            body: {
+                query: {
+                    "filter": {
+                        "term": { id: recipeId }
+                    }
+                }
+            }
+        })
     }
 }
 
