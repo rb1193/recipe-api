@@ -11,7 +11,7 @@ const ModelCollection = {
                 throw new Error('Search result not found')
             }
 
-            return Math.sign(hits[aIndex].score - hits[bIndex].score)
+            return Math.sign(hits[bIndex].score - hits[aIndex].score)
         })
     },
     page: <M extends Model>(items: M[], perPage: number, currentPage: number): Page<M> => {

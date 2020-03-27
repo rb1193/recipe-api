@@ -10,11 +10,18 @@ const RecipeSearch = {
             index: Config.ELASTICSEARCH_RECIPES_INDEX,
             body: {
                 query: {
-                    "multi_match" : {
-                        "query": query, 
-                        "fields": [ "name", "description", "ingredients" ] 
+                    "bool": {
+                        "must": {
+                            "multi_match" : {
+                                "query": query, 
+                                "fields": [ "name", "description", "ingredients" ] 
+                            },
+                        },
+                        "filter": {
+                            "term": { "user_id": user.$id().toString() }
+                        }
                     }
-                }
+                },
             }
         })
         return searchResults.body.hits.hits.map((hit) => ({id: hit._id, score: hit._score}))

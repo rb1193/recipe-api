@@ -5,7 +5,8 @@ import RecipeSearch from "./RecipeSearch"
 import ModelCollection from '../lib/ModelCollection'
 
 async function store(req: AuthenticatedRequest) {
-    return await req.user.$relatedQuery<RecipeModel>('recipes').insert(req.body)
+    const recipe = await req.user.$relatedQuery<RecipeModel>('recipes').insert(req.body)
+    return ApiResource.item(recipe)
 }
 
 async function list(req: AuthenticatedRequest) {
@@ -17,14 +18,15 @@ async function list(req: AuthenticatedRequest) {
 }
 
 async function show(req: AuthenticatedRequest) {
-    return await req.user.$relatedQuery<RecipeModel>('recipes').findById(req.params.recipe).throwIfNotFound()
+    const recipe = await req.user.$relatedQuery<RecipeModel>('recipes').findById(req.params.recipe).throwIfNotFound()
+    return ApiResource.item(recipe)
 }
 
 async function update(req: AuthenticatedRequest) {
-    return await req.user.$relatedQuery<RecipeModel>('recipes').updateAndFetchById(
-        req.params.recipe,
-        req.body
-    ).throwIfNotFound()
+    const recipe = await req.user.$relatedQuery<RecipeModel>('recipes')
+        .updateAndFetchById(req.params.recipe, req.body)
+        .throwIfNotFound()
+    return ApiResource.item(recipe)
 }
 
 async function remove(req: AuthenticatedRequest) {
