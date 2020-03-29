@@ -9,11 +9,12 @@ import { Strategy as LocalStrategy } from 'passport-local'
 import { findUser, serializeUser, deserializeUser } from './Auth/UserProvider'
 import knexConfig from './knexfile'
 import Knex from 'knex'
-import { Model } from 'objection'
+import { Model, ValidationError, NotFoundError } from 'objection'
 import asyncProtectedRoute from './lib/asyncProtectedRoute'
 import RecipesController from './Recipes/RecipesController'
 import RecipeModel from './Recipes/RecipeModel'
 import { PaginatedCollection, Item } from './lib/ApiResource'
+import handleModelValidationError from './lib/handleModelValidationError'
 
 // Configure database and ORM
 const knex = Knex(knexConfig[Config.APP_ENV || 'production'])
@@ -48,6 +49,11 @@ app.post('/login', passport.authenticate('local', { failWithError: true }), (req
     res.status(200).json(req.user)
 })
 
+app.post('/logout', (req: Request, res: Response) => {
+    req.logOut()
+    res.status(200).end()
+})
+
 app.get('/user', (req: Request, res: Response) => {
     if (req.isAuthenticated()) {
         res.status(200).json(req.user)
@@ -66,6 +72,19 @@ app.route('/recipes/:recipe')
 // Fall back to 404 page
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).send('Page not found')
+})
+
+app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
+    if (err instanceof ValidationError) {
+        res.status(400).json(handleModelValidationError(err))
+        return
+    }
+    if (err instanceof NotFoundError) {
+        res.status(404).json({data: {message: 'Not found'}})
+    }
+
+    console.error(err.stack)
+    res.status(500).send('Something broke!')
 })
 
 // Start server
