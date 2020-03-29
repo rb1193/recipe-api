@@ -46,7 +46,7 @@ app.use(passport.session())
 // Define routes
 app.options('*', cors())
 
-app.post('/login', passport.authenticate('local', { failWithError: true }), (req: Request, res: Response) => {
+app.post('/login', passport.authenticate('local'), (req: Request, res: Response) => {
     res.status(200).json(ApiResource.item(req.user as UserModel))
 })
 
@@ -82,6 +82,7 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
     }
     if (err instanceof NotFoundError) {
         res.status(404).json({data: {message: 'Not found'}})
+        return
     }
 
     console.error(err.stack)
