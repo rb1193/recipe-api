@@ -13,8 +13,9 @@ import { Model, ValidationError, NotFoundError } from 'objection'
 import asyncProtectedRoute from './lib/asyncProtectedRoute'
 import RecipesController from './Recipes/RecipesController'
 import RecipeModel from './Recipes/RecipeModel'
-import { PaginatedCollection, Item } from './lib/ApiResource'
+import ApiResource, { PaginatedCollection, Item } from './lib/ApiResource'
 import handleModelValidationError from './lib/handleModelValidationError'
+import UserModel from './Users/UserModel'
 
 // Configure database and ORM
 const knex = Knex(knexConfig[Config.APP_ENV || 'production'])
@@ -46,7 +47,7 @@ app.use(passport.session())
 app.options('*', cors())
 
 app.post('/login', passport.authenticate('local', { failWithError: true }), (req: Request, res: Response) => {
-    res.status(200).json(req.user)
+    res.status(200).json(ApiResource.item(req.user as UserModel))
 })
 
 app.post('/logout', (req: Request, res: Response) => {
@@ -56,7 +57,7 @@ app.post('/logout', (req: Request, res: Response) => {
 
 app.get('/user', (req: Request, res: Response) => {
     if (req.isAuthenticated()) {
-        res.status(200).json(req.user)
+        res.status(200).json(ApiResource.item(req.user as UserModel))
     }
     res.status(401).end()
 })

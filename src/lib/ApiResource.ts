@@ -19,11 +19,11 @@ const ApiResource = {
             data: item,
         }
     },
-    paginatedCollection: <M extends Model>(collection: Objection.Page<M>, perPage: number, currentPage: number): PaginatedCollection<M> => {
+    paginatedCollection: <M extends Model>(collection: Objection.Page<M>, perPage: number, currentPage: string): PaginatedCollection<M> => {
         return {
             data: collection.results,
             meta: {
-                current_page: currentPage,
+                current_page: +currentPage,
                 per_page: perPage,
                 last_page: Math.ceil(collection.total / Math.max(collection.results.length, 1)),
             }
