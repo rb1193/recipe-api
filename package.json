@@ -7,7 +7,7 @@
     "build": "tsc",
     "migrate": "npx ts-node ./node_modules/knex/bin/cli.js --knexfile='./src/knexfile.ts' migrate:latest",
     "run": "npx nodemon --inspect=0.0.0.0:9229 dist/app.js",
-    "run prod": "node dist/app.js",
+    "run-prod": "node dist/app.js",
     "test": "test",
     "watch": "tsc -w"
   },

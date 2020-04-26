@@ -25,7 +25,7 @@ Model.knex(knex)
 const app: Application = e()
 
 app.use(methodoverride('X-HTTP-Method-Override'))
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }))
+app.use(cors({ origin: Config.CORS_ORIGIN || 'http://localhost:3001', credentials: true }))
 app.use(e.json())
 app.use(
     session({

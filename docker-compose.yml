@@ -1,16 +1,31 @@
 version: '3'
 services:
+  nginx-proxy:
+    depends_on: ['web']
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certs:/etc/nginx/certs
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: always
+
   web:
     image: node:current
     command: npm run-script run
+    depends_on: [database, search]
     ports:
-     - "3000:3000"
-     - "9229:9229"
-    depends_on: [database, mail, search]
+      - "3000:3000"
     user: "node"
     volumes:
       - ./:/home/node/app
     working_dir: /home/node/app
+    environment:
+      - VIRTUAL_HOST=recipes-api.arbee.me
+      - VIRTUAL_PORT=3000
+      - VIRTUAL_PROTO=http
   database:
     image: postgres:latest
     restart: always
@@ -28,11 +43,11 @@ services:
 #      - "6379:6379"
 #    volumes:
 #      - ./devops/redis:/data
-  mail:
-    image: mailhog/mailhog
-    ports:
-      - "1025:1025"
-      - "8025:8025"
+#  mail:
+#    image: mailhog/mailhog
+#    ports:
+#      - "1025:1025"
+#      - "8025:8025"
   search:
     image: elasticsearch:7.6.1
     ports:
@@ -41,6 +56,8 @@ services:
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ELASTIC_PASSWORD=elastico"
+      - xpack.security.enabled=true
       - http.port=9200
       - http.cors.allow-origin=http://localhost:1358
       - http.cors.enabled=true

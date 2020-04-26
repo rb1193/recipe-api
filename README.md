@@ -1,6 +1,6 @@
 # Recipes API
 
-To run this project use `docker-compose up`.
+To run this project locally use mkcert to create a self-signed cert and key called `recipes-api.arbee.me.crt` and `recipes-api.arbee.me.crt`. Then do npm install. Then create a .env file with your configuration. Then run `docker-compose up`.
 
 To watch for changes use `npm run-script watch`.
 

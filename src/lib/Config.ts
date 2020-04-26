@@ -8,6 +8,7 @@ type Config = {
     APP_ENV: string
     APP_NAME: string
     COOKIE_SECRET: string
+    CORS_ORIGIN: string
     DATABASE_URL: string
     USER_EMAIL: string
     USER_PASSWORD: string
