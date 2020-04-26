@@ -12,7 +12,7 @@ async function store(req: AuthenticatedRequest) {
 }
 
 async function list(req: AuthenticatedRequest) {
-    const hits = await RecipeSearch.byFulltext(req.query.query, req.user)
+    const hits = await RecipeSearch.byFulltext(req.query.query || '', req.user)
     const perPage = 10
     const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').findByIds(hits.map((hit) => hit.id))
     const paginatedRecipes = ModelCollection.page(ModelCollection.sortBySearchScore(recipes, hits), perPage, req.query.page)
