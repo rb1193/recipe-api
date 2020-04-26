@@ -15,7 +15,7 @@ async function list(req: AuthenticatedRequest) {
     const hits = await RecipeSearch.byFulltext(req.query.query || '', req.user)
     const perPage = 10
     const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').findByIds(hits.map((hit) => hit.id))
-    const paginatedRecipes = ModelCollection.page(ModelCollection.sortBySearchScore(recipes, hits), perPage, req.query.page)
+    const paginatedRecipes = ModelCollection.page(ModelCollection.sortBySearchScore(recipes, hits), perPage, req.query.page || 1)
     return ApiResource.paginatedCollection<RecipeModel>(paginatedRecipes, perPage, req.query.page)
 }
 
