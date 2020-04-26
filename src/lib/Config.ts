@@ -12,6 +12,8 @@ type Config = {
     DATABASE_URL: string
     USER_EMAIL: string
     USER_PASSWORD: string
+    ELASTIC_USER: string
+    ELASTIC_PASSWORD: string
     ELASTICSEARCH_URL: string
     ELASTICSEARCH_RECIPES_INDEX: string
 }

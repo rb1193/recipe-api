@@ -16,6 +16,12 @@ export interface SearchHit {
     score: number,
 }
 
-const client = new Client({ node: Config.ELASTICSEARCH_URL || 'recipes' })
+const client = new Client({ 
+    auth: {
+        username: Config.ELASTIC_USER,
+        password: Config.ELASTIC_PASSWORD,
+    },
+    node: Config.ELASTICSEARCH_URL || 'recipes',
+})
 
 export default client
