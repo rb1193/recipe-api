@@ -19,7 +19,8 @@ class RecipeModel extends Model
                 description: { type: 'string', minLength: 1 },
                 method: { type: 'string' },
                 ingredients: { type: 'string' },
-                cooking_time: {type: 'integer' }
+                cooking_time: { type: 'integer' },
+                url: { type: 'string', format: 'uri' }
             }
         };
     }
@@ -31,6 +32,7 @@ class RecipeModel extends Model
     method!: string
     ingredients!: string
     cooking_time!: number
+    url!: string
 
     static relationMappings = {
         owner: {
