@@ -9,13 +9,15 @@ import { Strategy as LocalStrategy } from 'passport-local'
 import { findUser, serializeUser, deserializeUser } from './Auth/UserProvider'
 import knexConfig from './knexfile'
 import Knex from 'knex'
+import { ValidationError as AjvValidationError } from 'ajv'
 import { Model, ValidationError, NotFoundError } from 'objection'
 import asyncProtectedRoute from './lib/asyncProtectedRoute'
-import RecipesController from './Recipes/RecipesController'
+import RecipesController, { scrapeRequestSchema } from './Recipes/RecipesController'
 import RecipeModel from './Recipes/RecipeModel'
 import ApiResource, { PaginatedCollection, Item } from './lib/ApiResource'
-import handleModelValidationError from './lib/handleModelValidationError'
+import { handleModelValidationError, handleRequestValidationError } from './lib/ErrorHandlers'
 import UserModel from './Users/UserModel'
+import { RecipeScrapingError } from './lib/RecipeWebScraper'
 
 // Configure database and ORM
 const knex = Knex(knexConfig[Config.APP_ENV || 'production'])
@@ -69,6 +71,7 @@ app.route('/recipes/:recipe')
     .get(asyncProtectedRoute<Item<RecipeModel>>(RecipesController.show))
     .put(asyncProtectedRoute<Item<RecipeModel>>(RecipesController.update))
     .delete(asyncProtectedRoute<null>(RecipesController.remove))
+app.post('/recipes/scrape', asyncProtectedRoute<Item<RecipeModel>>(RecipesController.scrape, scrapeRequestSchema))
 
 // Fall back to 404 page
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -76,12 +79,22 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 })
 
 app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
+    if (err instanceof AjvValidationError) {
+        res.status(400).json(handleRequestValidationError(err))
+        return
+    }
+
     if (err instanceof ValidationError) {
         res.status(400).json(handleModelValidationError(err))
         return
     }
     if (err instanceof NotFoundError) {
         res.status(404).json({data: {message: 'Not found'}})
+        return
+    }
+
+    if (err instanceof RecipeScrapingError) {
+        res.status(424).json({data: {message: err.message}})
         return
     }
 

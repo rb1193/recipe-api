@@ -4,6 +4,26 @@ import ApiResource from "../lib/ApiResource"
 import RecipeSearch from "./RecipeSearch"
 import RecipeEventEmitter from './RecipeEvents'
 import ModelCollection from '../lib/ModelCollection'
+import { scrapeRecipe } from '../lib/RecipeWebScraper'
+import { JSONSchema7 } from "json-schema"
+
+export const scrapeRequestSchema: JSONSchema7 = {
+    $schema: "http://json-schema.org/draft-07/schema#",
+    properties: {
+        url: {
+            type: "string",
+            format: "uri"
+        }
+    },
+    required: ["url"]
+}
+
+async function scrape(req: AuthenticatedRequest) {
+    const recipeData = await scrapeRecipe(req.body.url)
+    const recipe = await req.user.$relatedQuery<RecipeModel>('recipes').insert(recipeData)
+    RecipeEventEmitter.emit('created', recipe)
+    return ApiResource.item(recipe)
+}
 
 async function store(req: AuthenticatedRequest) {
     const recipe = await req.user.$relatedQuery<RecipeModel>('recipes').insert(req.body)
@@ -39,6 +59,7 @@ async function remove(req: AuthenticatedRequest) {
 }
 
 const RecipesController = {
+    scrape: scrape,
     store: store,
     list: list,
     show: show,

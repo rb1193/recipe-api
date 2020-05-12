@@ -18,6 +18,7 @@ services:
     depends_on: [database, search]
     ports:
       - "3000:3000"
+      - "9229:9229"
     user: "node"
     volumes:
       - ./:/home/node/app
