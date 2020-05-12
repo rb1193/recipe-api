@@ -2,9 +2,10 @@ import RecipeModel from '../Recipes/RecipeModel'
 import { isNull } from 'util'
 import { flatten, frame } from 'jsonld'
 import Objection from 'objection'
-import { Recipe } from 'schema-dts'
+import { Recipe, Thing } from 'schema-dts'
 import fetch from 'node-fetch'
 import cheerio from 'cheerio'
+import moment from 'moment'
 
 export class RecipeScrapingError extends Error {
     constructor (recipeUrl: string) {
@@ -36,17 +37,20 @@ async function extractRecipeFromJsonLd(doc: CheerioStatic): Promise<Objection.Pa
             "@context": "https://schema.org",
             "@type": "Recipe"
         }
-    ) as Required<Recipe>
+    ) as Recipe
 
     return new Promise((resolve) => {
-        resolve({
+        if (!recipeJson.name) throw new Error()
+        const recipe = {
             name: parseStringValue(recipeJson.name),
-            description: parseStringValue(recipeJson.description),
-            method: recipeJson.recipeInstructions.toString(),
-            cooking_time: parseFloat(recipeJson.totalTime.toString()),
-            ingredients: recipeJson.recipeIngredient.toString(),
-            url: recipeJson.url.toString()
-        })
+            description: parseLongTextValue(recipeJson.description || ''),
+            method: parseInstructions(recipeJson.recipeInstructions || ''),
+            // @todo make cooking_time nullable
+            cooking_time: moment.duration(recipeJson.totalTime?.toString() || 'PT0M').asMinutes(),
+            ingredients: parseLongTextValue(recipeJson.recipeIngredient || ''),
+            url: doc('link[rel="canonical"]').attr('href')
+        }
+        resolve(recipe)
     })
 }
 
@@ -55,6 +59,28 @@ function parseStringValue(value: string | readonly string[]): string {
         return value.join(', ')
     }
     return value.toString()
+}
+
+function parseLongTextValue(value: string | readonly string[]): string {
+    if (value instanceof Array) {
+        return value.join('\n\n')
+    }
+    return value ? value.toString() : ''
+}
+
+function parseInstructions(value: Recipe['recipeInstructions']): string {
+    if (value instanceof Array) {
+        return value.map((instruction) => {
+            if (typeof instruction === "string") {
+                return instruction
+            }
+            if (instruction['type'] === "HowToStep") {
+                return instruction['text']
+            }
+        }).join('\n\n')
+    }
+
+    return value ? value.toString() : ''
 }
 
 /*
