@@ -52,7 +52,7 @@ async function extractRecipeFromJsonLd(jsonLd: any): Promise<Objection.PartialMo
             method: parseInstructions(recipeJson.recipeInstructions || ''),
             // @todo make cooking_time nullable
             cooking_time: moment.duration(recipeJson.totalTime?.toString() || 'PT0M').asMinutes(),
-            ingredients: parseLongTextValue(recipeJson.recipeIngredient || ''),
+            ingredients: parseLongTextValue(recipeJson.recipeIngredient || recipeJson.ingredients || ''),
             url: parseNullableStringValue(recipeJson.url)
         }
         resolve(recipe)
