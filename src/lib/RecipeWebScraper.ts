@@ -1,8 +1,7 @@
 import RecipeModel from '../Recipes/RecipeModel'
-import { isNull } from 'util'
-import { flatten, frame } from 'jsonld'
+import { frame } from 'jsonld'
 import Objection from 'objection'
-import { Recipe, Thing } from 'schema-dts'
+import { Recipe } from 'schema-dts'
 import fetch from 'node-fetch'
 import cheerio from 'cheerio'
 import moment from 'moment'
@@ -10,6 +9,8 @@ import moment from 'moment'
 export class RecipeScrapingError extends Error {
     constructor (recipeUrl: string) {
         super(`We were unable to successfully fetch a recipe from ${recipeUrl}`)
+        this.name = 'RecipeScrapingError'
+        Error.captureStackTrace(this, RecipeScrapingError)
     }
 }
 
@@ -29,7 +30,7 @@ export async function scrapeRecipe(url: string): Promise<Objection.PartialModelO
 
 async function extractRecipeFromJsonLd(doc: CheerioStatic): Promise<Objection.PartialModelObject<RecipeModel>> {
     const jsonLd = doc('script[type="application/ld+json"]').html()
-    if (!jsonLd) throw Error("Unable to extract recipe from jsonld")
+    if (!jsonLd) throw new Error("Unable to extract recipe from jsonld")
 
     const recipeJson = await frame(
         JSON.parse(jsonLd),

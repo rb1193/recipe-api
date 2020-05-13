@@ -93,7 +93,7 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
         return
     }
 
-    if (err instanceof RecipeScrapingError) {
+    if (err.name == "RecipeScrapingError") {
         res.status(424).json({data: {message: err.message}})
         return
     }
