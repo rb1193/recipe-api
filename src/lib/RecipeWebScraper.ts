@@ -5,6 +5,7 @@ import { Recipe } from 'schema-dts'
 import fetch from 'node-fetch'
 import cheerio from 'cheerio'
 import moment from 'moment'
+import mc = require('microdata-node')
 
 export class RecipeScrapingError extends Error {
     constructor (recipeUrl: string) {
@@ -21,19 +22,22 @@ export async function scrapeRecipe(url: string): Promise<Objection.PartialModelO
     }
     const resText = await response.text()
     const $ = cheerio.load(resText)
+
+    const structuredData = {
+        jsonLd: $('script[type="application/ld+json"]').html(),
+        microdata: $.html('[itemscope][itemType="http://schema.org/Recipe"]')
+    }
+    const jsonLd = structuredData.jsonLd ? JSON.parse(structuredData.jsonLd) : mc.toJsonld(structuredData.microdata)
     try {
-        return await extractRecipeFromJsonLd($)
+        return await extractRecipeFromJsonLd(jsonLd)
     } catch (err) {
         throw new RecipeScrapingError(url)
     }
 }
 
-async function extractRecipeFromJsonLd(doc: CheerioStatic): Promise<Objection.PartialModelObject<RecipeModel>> {
-    const jsonLd = doc('script[type="application/ld+json"]').html()
-    if (!jsonLd) throw new Error("Unable to extract recipe from jsonld")
-
+async function extractRecipeFromJsonLd(jsonLd: any): Promise<Objection.PartialModelObject<RecipeModel>> {
     const recipeJson = await frame(
-        JSON.parse(jsonLd),
+        jsonLd,
         {
             "@context": "https://schema.org",
             "@type": "Recipe"
@@ -49,7 +53,7 @@ async function extractRecipeFromJsonLd(doc: CheerioStatic): Promise<Objection.Pa
             // @todo make cooking_time nullable
             cooking_time: moment.duration(recipeJson.totalTime?.toString() || 'PT0M').asMinutes(),
             ingredients: parseLongTextValue(recipeJson.recipeIngredient || ''),
-            url: doc('link[rel="canonical"]').attr('href')
+            url: parseNullableStringValue(recipeJson.url)
         }
         resolve(recipe)
     })
@@ -60,6 +64,13 @@ function parseStringValue(value: string | readonly string[]): string {
         return value.join(', ')
     }
     return value.toString()
+}
+
+function parseNullableStringValue(value: string | readonly string[] | undefined): string | undefined {
+    if (typeof value === 'undefined') {
+        return undefined
+    }
+    return parseStringValue(value)
 }
 
 function parseLongTextValue(value: string | readonly string[]): string {
@@ -83,12 +94,3 @@ function parseInstructions(value: Recipe['recipeInstructions']): string {
 
     return value ? value.toString() : ''
 }
-
-/*
-async function extractRecipeFromMicrodata(doc: Document): Promise<Objection.PartialModelObject<RecipeModel>> {
-    const microdataNode = doc.querySelector(
-        '[itemscope itemType="http://schema.org/Recipe"]',
-    )
-    if (isNull(microdataNode)) throw new Error("Unable to extract recipe from microdata")
-}
-*/
