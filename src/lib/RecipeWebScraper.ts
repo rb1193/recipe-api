@@ -1,7 +1,7 @@
 import RecipeModel from '../Recipes/RecipeModel'
 import { frame } from 'jsonld'
 import Objection from 'objection'
-import { Recipe } from 'schema-dts'
+import { Recipe, Duration } from 'schema-dts'
 import fetch from 'node-fetch'
 import cheerio from 'cheerio'
 import moment from 'moment'
@@ -51,7 +51,7 @@ async function extractRecipeFromJsonLd(jsonLd: any): Promise<Objection.PartialMo
             description: parseLongTextValue(recipeJson.description || ''),
             method: parseInstructions(recipeJson.recipeInstructions || ''),
             // @todo make cooking_time nullable
-            cooking_time: moment.duration(recipeJson.totalTime?.toString() || 'PT0M').asMinutes(),
+            cooking_time: parseNullableDuration(recipeJson.totalTime),
             ingredients: parseLongTextValue(recipeJson.recipeIngredient || recipeJson.ingredients || ''),
             url: parseNullableStringValue(recipeJson.url)
         }
@@ -71,6 +71,13 @@ function parseNullableStringValue(value: string | readonly string[] | undefined)
         return undefined
     }
     return parseStringValue(value)
+}
+
+function parseNullableDuration(value: Duration | readonly Duration[] | undefined): number | undefined {
+    if (typeof value === 'undefined') {
+        return undefined
+    }
+    return moment.duration(value.toString()).asMinutes()
 }
 
 function parseLongTextValue(value: string | readonly string[]): string {
