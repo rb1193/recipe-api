@@ -20,7 +20,7 @@ class RecipeModel extends Model
                 method: { type: 'string' },
                 ingredients: { type: 'string' },
                 cooking_time: { type: 'integer' },
-                url: { type: 'string', format: 'uri' }
+                url: { type: 'string' }
             }
         };
     }
