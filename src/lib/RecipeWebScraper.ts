@@ -116,8 +116,8 @@ function parseInstructions(value: Recipe['recipeInstructions']): string {
             .map((instruction) => sanitize(instruction))
             .join('\n\n')
     }
-
-    return value ? value.toString() : ''
+    const sanitized = sanitize(value?.toString() || '')
+    return value ? sanitized : ''
 }
 
 function sanitize(value: string): string {
