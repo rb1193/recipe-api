@@ -23,7 +23,7 @@ const knexConfig: {[key: string]: any} = {
             host : Config.DATABASE_URL,
             user : Config.DATABASE_USER,
             password : Config.DATABASE_PASSWORD,
-            database : 'postgres',
+            database : 'recipes',
             port: 5432,
         },
         migrations: {

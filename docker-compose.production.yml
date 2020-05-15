@@ -61,6 +61,7 @@ services:
     ports: []
     restart: always
     environment:
+      POSTGRES_DB: recipes
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
