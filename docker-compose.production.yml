@@ -41,12 +41,8 @@ services:
         max-file: "2"
   
   web:
-    image: rbrown1193/recipe-rest-api_web:latest
-    expose:
-      - "3000"
-    command: npm run-script run-prod
+    image: rbrown1193/recipe-rest-api_web:1.0.0
     ports: []
-    working_dir: /home/node/app
     environment:
       - VIRTUAL_HOST=recipes-api.arbee.me
       - VIRTUAL_PORT=3000
