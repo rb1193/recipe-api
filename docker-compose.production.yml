@@ -14,6 +14,11 @@ services:
     environment:
       - NGINX_PROXY_CONTAINER=nginx-proxy
     restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "2"
 
   nginx-proxy:
     depends_on: ['web']
@@ -29,11 +34,14 @@ services:
       - certs:/etc/nginx/certs
       - /var/run/docker.sock:/tmp/docker.sock:ro
     restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "2"
   
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
+    image: rbrown1193/recipe-rest-api_web:latest
     expose:
       - "3000"
     command: npm run-script run-prod
@@ -45,6 +53,11 @@ services:
       - VIRTUAL_PROTO=https
       - LETSENCRYPT_HOST=recipes-api.arbee.me
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "2"
   database:
     expose:
       - "5432"
@@ -56,6 +69,11 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
       - dbdata:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "2"
   search:
     expose:
       - "9200"
@@ -67,6 +85,11 @@ services:
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
       xpack.security.enabled: "true"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "2"
 volumes:
   dbdata:
   esdata:
