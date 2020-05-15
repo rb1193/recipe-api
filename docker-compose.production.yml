@@ -25,23 +25,23 @@ services:
     volumes:
       - vhost:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
-      - dhparam:/etc/nginx/dhparam:ro
+      - dhparam:/etc/nginx/dhparam
       - certs:/etc/nginx/certs
       - /var/run/docker.sock:/tmp/docker.sock:ro
     restart: always
   
   web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
     expose:
       - "3000"
-    image: node:lts
     command: npm run-script run-prod
-    ports:
-    volumes:
-      - ./:/home/node/app
+    ports: []
     working_dir: /home/node/app
     environment:
       - VIRTUAL_HOST=recipes-api.arbee.me
-      - VIRUTAL_PORT=3000
+      - VIRTUAL_PORT=3000
       - VIRTUAL_PROTO=https
       - LETSENCRYPT_HOST=recipes-api.arbee.me
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
@@ -49,16 +49,18 @@ services:
     expose:
       - "5432"
     image: postgres:12
-    ports:
+    ports: []
     restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
   search:
     expose:
       - "9200"
     image: elasticsearch:7.6.1
-    ports:
+    ports: []
     restart: always
     environment:
       discovery.type: "single-node"
@@ -66,4 +68,9 @@ services:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
       xpack.security.enabled: "true"
 volumes:
+  dbdata:
   esdata:
+  vhost:
+  html:
+  dhparam:
+  certs:

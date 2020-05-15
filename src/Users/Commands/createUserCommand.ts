@@ -1,19 +1,18 @@
-import Config from '../../lib/Config'
 import UserModel from '../UserModel'
 import { UniqueViolationError } from 'objection'
 import bcrypt from 'bcrypt'
 
-export default async function createUserCommand() {
+export default async function createUserCommand(email: string, password: string) {
     try {
-        const password = await bcrypt.hash(Config.USER_PASSWORD, 10)
+        const hash = await bcrypt.hash(password, 10)
         const user = await UserModel.query().insert({
-            email: Config.USER_EMAIL,
-            password: password,
+            email: email,
+            password: hash,
         })
         console.log(`Account created for ${user.email}`)
     } catch (error) {
         if (error instanceof UniqueViolationError) {
-            console.log(`Account already exists for ${Config.USER_EMAIL}`)
+            console.log(`Account already exists for ${email}`)
             return
         }
         console.log(error)

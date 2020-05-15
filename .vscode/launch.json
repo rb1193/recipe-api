@@ -9,6 +9,7 @@
             "address": "localhost",
             "localRoot": "${workspaceFolder}/dist/",
             "remoteRoot": "/home/node/app/dist/",
+            "outFiles": ["${workspaceFolder}/dist/**/*js"],
             "protocol": "inspector",
             "sourceMaps": true
         }

@@ -31,7 +31,8 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -57,7 +58,7 @@ services:
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "ELASTIC_PASSWORD=elastico"
+      - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
       - xpack.security.enabled=true
       - http.port=9200
       - http.cors.allow-origin=http://localhost:1358

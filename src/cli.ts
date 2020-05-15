@@ -13,9 +13,9 @@ Model.knex(knex)
 async function main() {
     const program = new commander.Command()
 
-    program.command('create-user')
+    program.command('create-user <email> <password>')
         .description('Create the system user for the application')
-        .action(createUserCommand)
+        .action((email, password) => createUserCommand(email, password))
 
     program.command('create-recipes-index')
         .description('Create the recipes search index')

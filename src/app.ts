@@ -17,7 +17,6 @@ import RecipeModel from './Recipes/RecipeModel'
 import ApiResource, { PaginatedCollection, Item } from './lib/ApiResource'
 import { handleModelValidationError, handleRequestValidationError } from './lib/ErrorHandlers'
 import UserModel from './Users/UserModel'
-import { RecipeScrapingError } from './lib/RecipeWebScraper'
 
 // Configure database and ORM
 const knex = Knex(knexConfig[Config.APP_ENV || 'production'])
@@ -31,7 +30,15 @@ app.use(cors({ origin: Config.CORS_ORIGIN || 'http://localhost:3001', credential
 app.use(e.json())
 app.use(
     session({
-        store: new (require('connect-pg-simple')(session))(),
+        store: new (require('connect-pg-simple')(session))({
+            conObject: {
+                host : Config.DATABASE_URL,
+                user : Config.DATABASE_USER,
+                password : Config.DATABASE_PASSWORD,
+                database : 'postgres',
+                port: 5432,
+            }
+        }),
         secret: Config.COOKIE_SECRET || 'secret',
         resave: false,
         saveUninitialized: false,
@@ -93,7 +100,7 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
         return
     }
 
-    if (err.name == "RecipeScrapingError") {
+    if (err.name && err.name == "RecipeScrapingError") {
         res.status(424).json({data: {message: err.message}})
         return
     }

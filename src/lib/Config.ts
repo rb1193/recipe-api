@@ -9,9 +9,9 @@ type Config = {
     APP_NAME: string
     COOKIE_SECRET: string
     CORS_ORIGIN: string
+    DATABASE_PASSWORD: string
+    DATABASE_USER: string
     DATABASE_URL: string
-    USER_EMAIL: string
-    USER_PASSWORD: string
     ELASTIC_USER: string
     ELASTIC_PASSWORD: string
     ELASTICSEARCH_URL: string
