@@ -17,27 +17,18 @@ const knexConfig: {[key: string]: any} = {
         }
     },
 
-    staging: {
-        client: "postgresql",
-        connection: Config.DATABASE_URL,
-        pool: {
-            min: 2,
-            max: 10
-        },
-        migrations: {
-            tableName: "knex_migrations"
-        }
-    },
-
     production: {
         client: "postgresql",
-        connection: Config.DATABASE_URL,
-        pool: {
-            min: 2,
-            max: 10
+        connection: {
+            host : Config.DATABASE_URL,
+            user : Config.DATABASE_USER,
+            password : Config.DATABASE_PASSWORD,
+            database : 'postgres',
+            port: 5432,
         },
         migrations: {
-            tableName: "knex_migrations"
+            directory: '../migrations',
+            extension: 'ts'
         }
     }
 }
