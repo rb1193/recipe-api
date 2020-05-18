@@ -21,7 +21,7 @@ const client = new Client({
         username: Config.ELASTIC_USER,
         password: Config.ELASTIC_PASSWORD,
     },
-    node: Config.ELASTICSEARCH_URL || 'recipes',
+    node: Config.ELASTICSEARCH_URL,
 })
 
 export default client

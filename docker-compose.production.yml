@@ -43,10 +43,12 @@ services:
   web:
     image: rbrown1193/recipe-rest-api_web:1.0.0
     ports: []
+    env_file:
+      - .env
     environment:
       - VIRTUAL_HOST=recipes-api.arbee.me
       - VIRTUAL_PORT=3000
-      - VIRTUAL_PROTO=https
+      - VIRTUAL_PROTO=http
       - LETSENCRYPT_HOST=recipes-api.arbee.me
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     logging:
