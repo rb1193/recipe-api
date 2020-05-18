@@ -24,13 +24,14 @@ services:
       - ./:/home/node/app
     working_dir: /home/node/app
     environment:
-      - VIRTUAL_HOST=recipes-api.arbee.me
+      - VIRTUAL_HOST=local.recipes-api.arbee.me
       - VIRTUAL_PORT=3000
       - VIRTUAL_PROTO=http
   database:
     image: postgres:latest
     restart: always
     environment:
+      POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     ports:

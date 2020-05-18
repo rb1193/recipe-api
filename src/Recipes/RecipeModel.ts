@@ -10,7 +10,7 @@ class RecipeModel extends Model
     static get jsonSchema() {
         return {
             type: 'object',
-            required: ['name', 'description', 'cooking_time'],
+            required: ['name', 'description'],
         
             properties: {
                 id: { type: 'integer' },

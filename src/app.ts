@@ -26,7 +26,7 @@ Model.knex(knex)
 const app: Application = e()
 
 app.use(methodoverride('X-HTTP-Method-Override'))
-app.use(cors({ origin: Config.CORS_ORIGIN || 'http://localhost:3001', credentials: true }))
+app.use(cors({ origin: Config.CORS_ORIGIN, credentials: true }))
 app.use(e.json())
 app.use(
     session({
@@ -35,7 +35,7 @@ app.use(
                 host : Config.DATABASE_URL,
                 user : Config.DATABASE_USER,
                 password : Config.DATABASE_PASSWORD,
-                database : 'postgres',
+                database : Config.DATABASE_NAME,
                 port: 5432,
             }
         }),
