@@ -73,6 +73,8 @@ app.get('/user', (req: Request, res: Response) => {
 
 app.route('/recipes')
     .post(asyncProtectedRoute<Item<RecipeModel>>(RecipesController.store))
+    .get(asyncProtectedRoute<PaginatedCollection<RecipeModel>>(RecipesController.search))
+app.route('/recipes/all')
     .get(asyncProtectedRoute<PaginatedCollection<RecipeModel>>(RecipesController.list))
 app.route('/recipes/:recipe')
     .get(asyncProtectedRoute<Item<RecipeModel>>(RecipesController.show))

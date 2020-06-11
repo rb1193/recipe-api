@@ -32,6 +32,12 @@ async function store(req: AuthenticatedRequest) {
 }
 
 async function list(req: AuthenticatedRequest) {
+    const perPage = 10
+    const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').page(parseInt(req.query.page || "1") - 1, perPage)
+    return ApiResource.paginatedCollection<RecipeModel>(recipes, perPage, req.query.page)
+}
+
+async function search(req: AuthenticatedRequest) {
     const hits = await RecipeSearch.byFulltext(req.query.query || '', req.user)
     const perPage = 10
     const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').findByIds(hits.map((hit) => hit.id))
@@ -60,6 +66,7 @@ async function remove(req: AuthenticatedRequest) {
 
 const RecipesController = {
     scrape: scrape,
+    search: search,
     store: store,
     list: list,
     show: show,
