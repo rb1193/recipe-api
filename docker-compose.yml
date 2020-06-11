@@ -37,7 +37,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./var/lib/postgresql:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 #  redis:
 #    image: redis:latest
 #    command: ["redis-server", "--appendonly", "yes"]
@@ -70,3 +70,4 @@ services:
       - esdata:/usr/share/elasticsearch/data
 volumes:
   esdata:
+  pgdata:

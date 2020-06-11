@@ -12,6 +12,10 @@ To create the recipes search index run `docker-compose exec web npx ts-node src/
 
 To deploy, push the master branch. This will trigger a docker container build. You should also push a tagged version of the build.
 
+To create and push a tagged build:
+
+`docker build --tag rbrown1193/recipe-rest-api_web:{tag} -f ./Dockerfile.prod . && docker push rbrown1193/recipe-rest-api_web:{tag}`
+
 SSH into the server and run the following commands:
 
 - `cd ~/recipes`
