@@ -17,7 +17,6 @@ services:
     command: npm run-script run
     depends_on: [database, search]
     ports:
-      - "3000:3000"
       - "9229:9229"
     user: "node"
     volumes:
@@ -27,6 +26,8 @@ services:
       - VIRTUAL_HOST=local.recipes-api.arbee.me
       - VIRTUAL_PORT=3000
       - VIRTUAL_PROTO=http
+    expose:
+      - 3000
   database:
     image: postgres:latest
     restart: always

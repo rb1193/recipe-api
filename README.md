@@ -18,7 +18,7 @@ To create and push a tagged build:
 
 SSH into the server and run the following commands:
 
-- `cd ~/recipes`
+- `cd ~/recipes-api`
 - `docker pull rbrown1193/recipe-rest-api_web:latest`
 - `docker-compose up -d`
 - `docker-compose exec web npm run migrate (if necessary)`
