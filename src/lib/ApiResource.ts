@@ -25,7 +25,7 @@ const ApiResource = {
             meta: {
                 current_page: +currentPage,
                 per_page: perPage,
-                last_page: Math.ceil(collection.total / Math.max(collection.results.length, 1)),
+                last_page: Math.ceil(collection.total / perPage),
             }
         }
     }
