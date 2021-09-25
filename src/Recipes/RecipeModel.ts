@@ -19,8 +19,8 @@ class RecipeModel extends Model
                 description: { type: 'string', minLength: 1 },
                 method: { type: 'string' },
                 ingredients: { type: 'string' },
-                cooking_time: { type: 'integer' },
-                url: { type: 'string' }
+                cooking_time: { oneOf: [{ type: 'integer' }, {type: 'null'}] },
+                url: { oneOf: [{ type: 'string' }, {type: 'null'}] },
             }
         };
     }
