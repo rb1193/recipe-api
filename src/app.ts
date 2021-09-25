@@ -53,7 +53,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // Define routes
-app.options('*', cors())
+app.options('*', () => cors())
 
 app.post('/login', passport.authenticate('local'), (req: Request, res: Response) => {
     res.status(200).json(ApiResource.item(req.user as UserModel))

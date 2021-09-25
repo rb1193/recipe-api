@@ -17,8 +17,9 @@ export async function findUser(username: string, password: string, done: (error:
     }
 }
 
-export function serializeUser(user: UserModel, done: (error: any, id: number) => void) {
-    done(null, user.id)
+export function serializeUser(user: Express.User, done: (err: any, id: number) => void) {
+    const userModel = user as UserModel
+    done(null, userModel.id)
 }
 
 export async function deserializeUser(id: number, done: (error: any, user?: UserModel) => void) {

@@ -28,11 +28,11 @@ class RecipeModel extends Model
     id!: number
     user_id!: number
     name!: string
-    description!: string
+    description?: string
     method!: string
     ingredients!: string
-    cooking_time!: number
-    url!: string
+    cooking_time?: number
+    url?: string
 
     static relationMappings = {
         owner: {
@@ -47,3 +47,14 @@ class RecipeModel extends Model
 }
 
 export default RecipeModel
+
+export type Recipe = {
+    id: number,
+    user_id: number,
+    name: string,
+    description?: string,
+    method: string,
+    ingredients: string,
+    cooking_time?: number,
+    url?: string,
+}

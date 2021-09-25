@@ -33,16 +33,16 @@ async function store(req: AuthenticatedRequest) {
 
 async function list(req: AuthenticatedRequest) {
     const perPage = 10
-    const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').page(parseInt(req.query.page || "1") - 1, perPage)
-    return ApiResource.paginatedCollection<RecipeModel>(recipes, perPage, req.query.page)
+    const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').page(parseInt(req.query.page?.toString() || "1") - 1, perPage)
+    return ApiResource.paginatedCollection<RecipeModel>(recipes, perPage, req.query.page?.toString() || "1")
 }
 
 async function search(req: AuthenticatedRequest) {
-    const hits = await RecipeSearch.byFulltext(req.query.query || '', req.user)
+    const hits = await RecipeSearch.byFulltext(req.query.query as string, req.user)
     const perPage = 10
     const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').findByIds(hits.map((hit) => hit.id))
-    const paginatedRecipes = ModelCollection.page(ModelCollection.sortBySearchScore(recipes, hits), perPage, req.query.page || 1)
-    return ApiResource.paginatedCollection<RecipeModel>(paginatedRecipes, perPage, req.query.page)
+    const paginatedRecipes = ModelCollection.page(ModelCollection.sortBySearchScore(recipes, hits), perPage, parseInt(req.query.page as string))
+    return ApiResource.paginatedCollection<RecipeModel>(paginatedRecipes, perPage, req.query.page as string)
 }
 
 async function show(req: AuthenticatedRequest) {
