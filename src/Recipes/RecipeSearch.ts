@@ -37,6 +37,7 @@ const RecipeSearch = {
                 description: recipe.description,
                 cooking_time: recipe.cooking_time,
                 ingredients: recipe.ingredients,
+                servings: recipe.servings,
             }
         })
     },

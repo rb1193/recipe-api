@@ -48,6 +48,7 @@ function extractRecipeFromJsonLd(
         cooking_time: cookingTime,
         ingredients: jsonLd.recipeIngredient?.toString() || jsonLd.ingredients?.toString() || '',
         url: jsonLd.url?.toString(),
+        servings: jsonLd.recipeYield?.toString(),
     };
 }
 
