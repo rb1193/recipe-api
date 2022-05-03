@@ -21,6 +21,7 @@ class RecipeModel extends Model
                 ingredients: { type: 'string' },
                 cooking_time: { oneOf: [{ type: 'integer' }, {type: 'null'}] },
                 url: { oneOf: [{ type: 'string' }, {type: 'null'}] },
+                servings: { oneOf: [{ type: 'string' }, { type: 'null' }] },
             }
         };
     }
@@ -33,6 +34,7 @@ class RecipeModel extends Model
     ingredients!: string
     cooking_time?: number
     url?: string
+    servings?: string
 
     static relationMappings = {
         owner: {
@@ -57,4 +59,5 @@ export type Recipe = {
     ingredients: string,
     cooking_time?: number,
     url?: string,
+    servings?: string,
 }
