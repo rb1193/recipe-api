@@ -14,7 +14,7 @@ emitter.on('updated', (recipe: RecipeModel) => {
     RecipeSearch.index(recipe)
 })
 
-emitter.on('deleted', (recipeId: number) => {
+emitter.on('deleted', (recipeId: string) => {
     RecipeSearch.delete(recipeId)
 })
 

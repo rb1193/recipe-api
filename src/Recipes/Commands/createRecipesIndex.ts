@@ -1,6 +1,5 @@
 import client from '../../lib/SearchClient'
 import Config from './../../lib/Config'
-import { ResponseError } from '@elastic/elasticsearch/lib/errors'
 
 export default async function createRecipesIndex() {
     try {
@@ -9,9 +8,7 @@ export default async function createRecipesIndex() {
         })
         console.log('Recipes index created')
     } catch (error) {
-        if (error instanceof ResponseError) {
-            console.log(error.body)
-        }
+        console.log(error)
         return
     }
 }

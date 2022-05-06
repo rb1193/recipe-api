@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import AuthenticatedRequest, { isAuthenticatedRequest } from "../lib/AuthenticatedRequest"
+import { AuthenticatedRequest, isAuthenticatedRequest } from "./Requests"
 import { JSONSchema7 } from "json-schema"
 import Ajv, { ValidationError } from "ajv"
 

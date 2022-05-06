@@ -1,4 +1,4 @@
-import AuthenticatedRequest from "../lib/AuthenticatedRequest"
+import {AuthenticatedRequest, PaginatedResponseRequest} from "../lib/Requests"
 import RecipeModel from "./RecipeModel"
 import ApiResource from "../lib/ApiResource"
 import RecipeSearch from "./RecipeSearch"
@@ -37,11 +37,11 @@ async function list(req: AuthenticatedRequest) {
     return ApiResource.paginatedCollection<RecipeModel>(recipes, perPage, req.query.page?.toString() || "1")
 }
 
-async function search(req: AuthenticatedRequest) {
+async function search(req: AuthenticatedRequest & PaginatedResponseRequest) {
     const hits = await RecipeSearch.byFulltext(req.query.query as string, req.user)
     const perPage = 10
     const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').findByIds(hits.map((hit) => hit.id))
-    const paginatedRecipes = ModelCollection.page(ModelCollection.sortBySearchScore(recipes, hits), perPage, parseInt(req.query.page as string))
+    const paginatedRecipes = ModelCollection.page(ModelCollection.sortBySearchScore(recipes, hits), perPage, parseInt(req.query.page || '1', 10))
     return ApiResource.paginatedCollection<RecipeModel>(paginatedRecipes, perPage, req.query.page as string)
 }
 
@@ -59,8 +59,8 @@ async function update(req: AuthenticatedRequest) {
 }
 
 async function remove(req: AuthenticatedRequest) {
-    const recipeId = await req.user.$relatedQuery('recipes').deleteById(req.params.recipe).throwIfNotFound()
-    RecipeEventEmitter.emit('deleted', recipeId)
+    await req.user.$relatedQuery('recipes').deleteById(req.params.recipe).throwIfNotFound()
+    RecipeEventEmitter.emit('deleted', req.params.recipe)
     return null
 }
 

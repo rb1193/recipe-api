@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A sandbox express project",
   "main": "dist/app.js",
+  "engines": {
+    "node": "16"
+  },
   "scripts": {
     "build": "tsc",
     "migrate": "npx ts-node ./node_modules/knex/bin/cli.js --knexfile='./src/knexfile.ts' migrate:latest",
@@ -14,38 +17,37 @@
   "author": "Ryan Brown",
   "license": "ISC",
   "dependencies": {
-    "@elastic/elasticsearch": "^7.17.0",
+    "@elastic/elasticsearch": "^8.0.0",
     "ajv": "^6.12.2",
     "bcrypt": "^5.0.0",
     "cheerio": "^1.0.0-rc.3",
     "commander": "^5.0.0",
-    "connect-pg-simple": "^6.1.0",
+    "connect-pg-simple": "^7.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.18.1",
     "express-session": "^1.17.0",
     "jsonld": "^3.1.0",
-    "knex": "^0.20.10",
+    "knex": "^2.0.0",
     "method-override": "^3.0.0",
     "microdata-node": "^2.0.0",
     "moment": "^2.29.3",
     "node-fetch": "^2.6.7",
-    "objection": "^2.2.18",
+    "objection": "^3.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "pg": "^7.18.2",
+    "pg": "^8.0.0",
     "striptags": "^3.1.1",
     "ts-node": "^8.6.2",
     "typescript": "^4.6.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
-    "@types/connect-pg-simple": "^4.2.0",
+    "@types/connect-pg-simple": "^7.0.0",
     "@types/cors": "^2.8.6",
     "@types/debug": "^4.1.5",
     "@types/express": "^4.17.2",
     "@types/express-session": "^1.17.0",
-    "@types/jest": "^25.1.4",
     "@types/json-schema": "^7.0.11",
     "@types/jsonld": "^1.5.1",
     "@types/method-override": "0.0.31",
@@ -53,9 +55,7 @@
     "@types/passport": "^1.0.3",
     "@types/passport-local": "^1.0.33",
     "debug": "^4.3.4",
-    "jest": "^25.2.3",
     "nodemon": "^2.0.16",
-    "schema-dts": "^1.1.0",
-    "ts-jest": "^25.2.1"
+    "schema-dts": "^1.1.0"
   }
 }

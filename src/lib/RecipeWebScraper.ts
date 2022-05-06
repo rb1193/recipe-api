@@ -40,13 +40,14 @@ function extractRecipeFromJsonLd(
     jsonLd: WithContext<Recipe>,
 ): Partial<RecipeModel> {
     const cookingTime = moment.duration(jsonLd.totalTime?.toString()).asMinutes();
+    const ingredients = parseIngredients(jsonLd.recipeIngredient || jsonLd.ingredients);
     return {
         name: jsonLd.name?.toString(),
         description: jsonLd.description?.toString(),
         method: parseInstructions(jsonLd.recipeInstructions as string | HowToStep[]),
         // @todo make cooking_time nullable
         cooking_time: cookingTime,
-        ingredients: jsonLd.recipeIngredient?.toString() || jsonLd.ingredients?.toString() || '',
+        ingredients,
         url: jsonLd.url?.toString(),
         servings: jsonLd.recipeYield?.toString(),
     };
@@ -68,6 +69,22 @@ function parseInstructions(value: string | HowToStep[]): string {
     }
     const sanitized = sanitize(value?.toString() || '')
     return value ? sanitized : ''
+}
+
+function parseIngredients(value: unknown): string {
+    if (Array.isArray(value)) {
+        return value.join("\r\n")
+    }
+
+    if (value && typeof value === 'object') {
+        return value.toString()
+    }
+
+    if (typeof value === 'string') {
+        return value
+    }
+
+    return ''
 }
 
 function sanitize(value: string): string {
