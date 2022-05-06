@@ -23,6 +23,8 @@ SSH into the server and run the following commands:
 - `docker-compose up -d`
 - `docker-compose exec web npm run migrate (if necessary)`
 
+Bear in mind if you have updated any of the other services you will need to update the docker-compose file located on the server. An example is provided in the repo.
+
 ## Commands
 
 There are a handful of CLI commands used for administering the application. The CLI can be run using `docker-compose exec web npx ts-node src/cli.ts`.

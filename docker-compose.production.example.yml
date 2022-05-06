@@ -41,7 +41,7 @@ services:
         max-file: "2"
   
   web:
-    image: rbrown1193/recipe-rest-api_web:1.0.0
+    image: rbrown1193/recipe-rest-api_web:latest
     ports: []
     env_file:
       - .env
@@ -76,7 +76,7 @@ services:
   search:
     expose:
       - "9200"
-    image: elasticsearch:7.6.1
+    image: elasticsearch:8
     ports: []
     restart: always
     environment:
