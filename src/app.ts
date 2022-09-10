@@ -113,3 +113,5 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
 
 // Start server
 app.listen(3000)
+
+export default app
