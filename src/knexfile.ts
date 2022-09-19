@@ -14,6 +14,10 @@ const knexConfig: {[key: string]: any} = {
         migrations: {
             directory: '../migrations',
             extension: 'ts'
+        },
+        pool: {
+            min: 0,
+            max: 1,
         }
     },
 

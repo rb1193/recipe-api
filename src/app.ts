@@ -3,7 +3,7 @@ import e = require('express')
 import session = require('express-session')
 import methodoverride = require('method-override')
 import cors = require('cors')
-import knex from './database'
+import db from './database'
 import Config from './lib/Config'
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
@@ -16,7 +16,6 @@ import RecipeModel from './Recipes/RecipeModel'
 import ApiResource, { PaginatedCollection, Item } from './lib/ApiResource'
 import { handleModelValidationError, handleRequestValidationError } from './lib/ErrorHandlers'
 import UserModel from './Users/UserModel'
-
 
 
 // Configure application
@@ -113,9 +112,7 @@ const server = app.listen(3000)
 
 process.on('SIGTERM', () => {
     console.debug('SIGTERM signal received: closing HTTP server')
-    knex.destroy(() => {
-        console.debug('Destroyed database connection')
-    })
+    db?.destroyConnection()
     server.close(() => {
       console.debug('HTTP server closed')
     })
