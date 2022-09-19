@@ -27,8 +27,8 @@ describe('The login endpoint', () => {
                 password
             })
             .set('Accept', 'application/json')
-            .expect('Content-Type', 'application/json; charset=utf-8')
             .expect(200)
+            .expect('Content-Type', 'application/json; charset=utf-8')
             .then((res) => {
                 assert(res.body.data.email === email)
                 done()
