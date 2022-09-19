@@ -3,14 +3,13 @@ import e = require('express')
 import session = require('express-session')
 import methodoverride = require('method-override')
 import cors = require('cors')
+import knex from './database'
 import Config from './lib/Config'
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { findUser, serializeUser, deserializeUser } from './Auth/UserProvider'
-import knexConfig from './knexfile'
-import Knex from 'knex'
 import { ValidationError as AjvValidationError } from 'ajv'
-import { Model, ValidationError, NotFoundError } from 'objection'
+import { ValidationError, NotFoundError } from 'objection'
 import asyncProtectedRoute from './lib/asyncProtectedRoute'
 import RecipesController, { scrapeRequestSchema } from './Recipes/RecipesController'
 import RecipeModel from './Recipes/RecipeModel'
@@ -18,9 +17,7 @@ import ApiResource, { PaginatedCollection, Item } from './lib/ApiResource'
 import { handleModelValidationError, handleRequestValidationError } from './lib/ErrorHandlers'
 import UserModel from './Users/UserModel'
 
-// Configure database and ORM
-const knex = Knex(knexConfig[Config.APP_ENV || 'production'])
-Model.knex(knex)
+
 
 // Configure application
 const app: Application = e()
@@ -112,6 +109,16 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
 })
 
 // Start server
-app.listen(3000)
+const server = app.listen(3000)
+
+process.on('SIGTERM', () => {
+    console.debug('SIGTERM signal received: closing HTTP server')
+    knex.destroy(() => {
+        console.debug('Destroyed database connection')
+    })
+    server.close(() => {
+      console.debug('HTTP server closed')
+    })
+})
 
 export default app
