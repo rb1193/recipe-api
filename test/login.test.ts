@@ -6,21 +6,15 @@ import assert from 'assert'
 describe('The login endpoint', () => {
     const email = "test@test.com"
     const password = "test1234"
-
-    before(async () => {
+    
+    it('returns a 200 with a token if the credentials are valid', async () => {
         const hash = await bcrypt.hash(password, 10)
         await UserModel.query().insert({
             email: email,
             password: hash,
         })
-    })
 
-    after(async () => {
-        await UserModel.query().delete()
-    })
-    
-    it('returns a 200 with a token if the credentials are valid', (done) => {
-        request('http://localhost:3000')
+        await request('http://localhost:3000')
             .post('/login')
             .send({
                 username: email,
@@ -31,18 +25,19 @@ describe('The login endpoint', () => {
             .expect('Content-Type', 'application/json; charset=utf-8')
             .then((res) => {
                 assert(res.body.data.email === email)
-                done()
             })
+        
+        await UserModel.query().delete()
     })
 
-    it('returns a 401 response if the credentials are invalid', (done) => {
-        request('http://localhost:3000')
+    it('returns a 401 response if the credentials are invalid', async () => {
+        await request('http://localhost:3000')
             .post('/login')
             .send({
                 username: email,
-                password: 'invalid'
+                password
             })
             .set('Accept', 'application/json')
-            .expect(401, done)
+            .expect(401)
     })
 })
