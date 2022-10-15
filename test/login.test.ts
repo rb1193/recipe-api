@@ -2,20 +2,11 @@ import UserModel from '../src/Users/UserModel'
 import bcrypt from 'bcrypt'
 import request from 'supertest'
 import assert from 'assert'
-import db from '../src/database'
+import app from '../src/app';
 
 describe('The login endpoint', function () {
-    this.timeout(0)
     const email = "test@test.com"
     const password = "test1234"
-
-    beforeEach(async () => {
-        await db?.startTransaction()
-    })
-
-    afterEach(async () => {
-        await db?.rollbackTransaction()
-    })
     
     it('returns a 200 with a token if the credentials are valid', async () => {
         const hash = await bcrypt.hash(password, 10)
@@ -24,7 +15,7 @@ describe('The login endpoint', function () {
             password: hash,
         })
 
-        const response = await request('http://localhost:3000')
+        const response = await request(app)
             .post('/login')
             .send({
                 username: email,
@@ -38,7 +29,7 @@ describe('The login endpoint', function () {
     })
 
     it('returns a 401 response if the credentials are invalid', async () => {
-        await request('http://localhost:3000')
+        await request(app)
             .post('/login')
             .send({
                 username: email,

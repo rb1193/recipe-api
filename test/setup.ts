@@ -5,5 +5,5 @@ export const mochaGlobalSetup = async () => {
 }
 
 export const mochaGlobalTeardown = async () => {
-    database?.destroyConnection()
+    database?.destroy()
 }

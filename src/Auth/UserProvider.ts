@@ -12,6 +12,7 @@ export async function findUser(username: string, password: string, done: (error:
     } catch (err) {
         if (err instanceof NotFoundError) {
             done(null, false, { message: "Invalid credentials" })
+            return
         }
         done(err)
     }

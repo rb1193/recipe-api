@@ -3,7 +3,6 @@ import e = require('express')
 import session = require('express-session')
 import methodoverride = require('method-override')
 import cors = require('cors')
-import db from './database'
 import Config from './lib/Config'
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
@@ -105,17 +104,6 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
 
     console.error(err.stack)
     res.status(500).send('Something broke!')
-})
-
-// Start server
-const server = app.listen(3000)
-
-process.on('SIGTERM', () => {
-    console.debug('SIGTERM signal received: closing HTTP server')
-    db?.destroyConnection()
-    server.close(() => {
-      console.debug('HTTP server closed')
-    })
 })
 
 export default app

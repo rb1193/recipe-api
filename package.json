@@ -10,9 +10,9 @@
     "build": "tsc",
     "migrate": "npx ts-node ./node_modules/knex/bin/cli.js --knexfile='./src/knexfile.ts' migrate:latest",
     "migrate.fresh": "npx ts-node ./node_modules/knex/bin/cli.js --knexfile='./src/knexfile.ts' migrate:rollback --all && npm run migrate",
-    "run": "npx nodemon --inspect=0.0.0.0:9229 dist/app.js",
-    "run-prod": "node dist/app.js",
-    "test": "npm run migrate.fresh && npx ts-node ./node_modules/mocha/bin/mocha --require test/setup.ts test/*.test.ts",
+    "run": "npx nodemon --inspect=0.0.0.0:9229 dist/server.js",
+    "run-prod": "node dist/server.js",
+    "test": "npm run migrate.fresh && npx ts-node ./node_modules/mocha/bin/mocha --require test/setup.ts --require test/hooks.ts test/*.test.ts",
     "watch": "tsc -w"
   },
   "author": "Ryan Brown",
