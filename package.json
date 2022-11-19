@@ -12,7 +12,7 @@
     "migrate.fresh": "npx ts-node ./node_modules/knex/bin/cli.js --knexfile='./src/knexfile.ts' migrate:rollback --all && npm run migrate",
     "run": "npx nodemon --inspect=0.0.0.0:9229 dist/server.js",
     "run-prod": "node dist/server.js",
-    "test": "npm run migrate.fresh && npx ts-node ./node_modules/mocha/bin/mocha --require test/setup.ts --require test/hooks.ts test/*.test.ts",
+    "test": "npm run migrate.fresh && npx ts-node ./node_modules/mocha/bin/mocha --require test/setup.ts --require test/hooks.ts test/*.test.ts test/**/*.test.ts",
     "watch": "tsc -w"
   },
   "author": "Ryan Brown",
@@ -43,6 +43,7 @@
     "typescript": "^4.6.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/bcrypt": "^3.0.0",
     "@types/connect-pg-simple": "^7.0.0",
     "@types/cors": "^2.8.6",
@@ -58,6 +59,7 @@
     "@types/passport-local": "^1.0.33",
     "@types/supertest": "^2.0.12",
     "debug": "^4.3.4",
+    "fishery": "^2.2.2",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.16",
     "schema-dts": "^1.1.0",
