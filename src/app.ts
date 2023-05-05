@@ -1,8 +1,8 @@
 import { Application, NextFunction, Request, Response } from 'express'
-import e = require('express')
-import session = require('express-session')
-import methodoverride = require('method-override')
-import cors = require('cors')
+import e from "express"
+import session from "express-session"
+import methodoverride from "method-override"
+import cors from "cors"
 import Config from './lib/Config'
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
@@ -15,6 +15,7 @@ import RecipeModel from './Recipes/RecipeModel'
 import ApiResource, { PaginatedCollection, Item } from './lib/ApiResource'
 import { handleModelValidationError, handleRequestValidationError } from './lib/ErrorHandlers'
 import UserModel from './Users/UserModel'
+import connect from "connect-pg-simple"
 
 
 // Configure application
@@ -25,7 +26,7 @@ app.use(cors({ origin: Config.CORS_ORIGIN, credentials: true }))
 app.use(e.json())
 app.use(
     session({
-        store: new (require('connect-pg-simple')(session))({
+        store: new (connect(session))({
             conObject: {
                 host : Config.DATABASE_URL,
                 user : Config.DATABASE_USER,
@@ -38,6 +39,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
+            secure: true,
             maxAge: 30 * 24 * 60 * 60 * 1000,
         }, // 30 days
     }),
@@ -56,9 +58,13 @@ app.post('/login', passport.authenticate('local'), (req: Request, res: Response)
     res.status(200).json(ApiResource.item(req.user as UserModel))
 })
 
-app.post('/logout', (req: Request, res: Response) => {
-    req.logOut()
-    res.status(200).end()
+app.post('/logout', (req: Request, res: Response, next) => {
+    req.logOut((error) => {
+        if (error) {
+            return next(error)
+        }
+        res.status(200).end()
+    })
 })
 
 app.get('/user', (req: Request, res: Response) => {

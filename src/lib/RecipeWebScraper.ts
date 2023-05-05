@@ -2,10 +2,10 @@ import RecipeModel from '../Recipes/RecipeModel'
 import Objection from 'objection'
 import { HowToStep, Recipe, WithContext } from 'schema-dts'
 import fetch from 'node-fetch'
-import cheerio from 'cheerio'
+import { load } from 'cheerio'
 import striptags from 'striptags'
-import mc = require('microdata-node')
-import moment = require('moment')
+import mc from "microdata-node"
+import moment from "moment"
 
 export class RecipeScrapingError extends Error {
     constructor(recipeUrl: string) {
@@ -23,7 +23,7 @@ export async function scrapeRecipe(
         throw new RecipeScrapingError(url)
     }
     const resText = await response.text()
-    const $ = cheerio.load(resText)
+    const $ = load(resText)
 
     const structuredData = {
         jsonLd: $('script[type="application/ld+json"]').html(),

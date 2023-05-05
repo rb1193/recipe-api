@@ -13,7 +13,7 @@ services:
     restart: always
 
   web:
-    image: node:16
+    image: node:18
     command: npm run-script run
     depends_on: [database, search]
     ports:

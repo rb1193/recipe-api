@@ -14,6 +14,7 @@ export const authenticate = async () => {
 
     const response = await request(app)
         .post('/login')
+        .set('Accept', 'application/json')
         .send({
             username: user.email,
             password
