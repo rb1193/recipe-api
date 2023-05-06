@@ -20,13 +20,13 @@ export const scrapeRequestSchema: JSONSchema7 = {
 
 async function scrape(req: AuthenticatedRequest) {
     const recipeData = await scrapeRecipe(req.body.url)
-    const recipe = await req.user.$relatedQuery<RecipeModel>('recipes').insert(recipeData)
+    const recipe = await req.user.$relatedQuery<RecipeModel>('recipes').insert(recipeData).returning('*')
     RecipeEventEmitter.emit('created', recipe)
     return ApiResource.item(recipe)
 }
 
 async function store(req: AuthenticatedRequest) {
-    const recipe = await req.user.$relatedQuery<RecipeModel>('recipes').insert(req.body)
+    const recipe = await req.user.$relatedQuery<RecipeModel>('recipes').insert(req.body).returning('*')
     RecipeEventEmitter.emit('created', recipe)
     return ApiResource.item(recipe)
 }
