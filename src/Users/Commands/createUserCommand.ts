@@ -8,7 +8,7 @@ export default async function createUserCommand(email: string, password: string)
         const user = await UserModel.query().insert({
             email: email,
             password: hash,
-        })
+        }).returning('*')
         console.log(`Account created for ${user.email}`)
     } catch (error) {
         if (error instanceof UniqueViolationError) {
