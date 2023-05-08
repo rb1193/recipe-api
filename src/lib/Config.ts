@@ -2,7 +2,8 @@ import { resolve } from "path"
 import { config } from "dotenv"
 
 //Load config
-config({ path: resolve(__dirname, "../../.env") })
+const envPath = resolve(__dirname, "../../../.env");
+config({ path: envPath })
 
 type Config = {
     APP_ENV: string

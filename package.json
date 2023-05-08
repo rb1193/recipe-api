@@ -11,8 +11,8 @@
     "build": "tsc",
     "migrate": "npx ts-node ./node_modules/knex/bin/cli.js --knexfile='./src/knexfile.ts' migrate:latest",
     "migrate.fresh": "npx ts-node ./node_modules/knex/bin/cli.js --knexfile='./src/knexfile.ts' migrate:rollback --all && npm run migrate",
-    "run": "npx nodemon --inspect=0.0.0.0:9229 dist/server.js",
-    "run-prod": "node dist/server.js",
+    "start": "npx nodemon --inspect=0.0.0.0:9229 dist/src/server.js",
+    "run-prod": "node dist/src/server.js",
     "test": "npm run migrate.fresh && NODE_OPTIONS=\"--loader ts-node/esm\" mocha -r ts-node/register -r test/setup.ts -r test/hooks.ts test/*.test.ts test/**/*.test.ts",
     "watch": "tsc -w"
   },
@@ -41,7 +41,7 @@
     "pg": "^8.0.0",
     "striptags": "^3.1.1",
     "ts-node": "^10.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^4.7.4"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

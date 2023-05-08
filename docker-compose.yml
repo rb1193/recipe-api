@@ -14,7 +14,7 @@ services:
 
   web:
     image: node:18
-    command: npm run-script run
+    command: npm run start
     depends_on: [database, search]
     ports:
       - "9229:9229"
@@ -25,7 +25,6 @@ services:
     environment:
       - VIRTUAL_HOST=local.recipes-api.arbee.me
       - VIRTUAL_PORT=3000
-      - VIRTUAL_PROTO=http
     expose:
       - 3000
   database:
