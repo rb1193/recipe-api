@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import { AuthenticatedRequest, isAuthenticatedRequest } from "./Requests"
 import { JSONSchema7 } from "json-schema"
 import Ajv, { ValidationError } from "ajv"
+import addFormats from "ajv-formats"
 
 export default function asyncProtectedRoute<T>(fn: (req: AuthenticatedRequest) => Promise<T>, rules?: JSONSchema7) {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -12,6 +13,7 @@ export default function asyncProtectedRoute<T>(fn: (req: AuthenticatedRequest) =
 
         if (rules) {
             const ajv = new Ajv()
+            addFormats(ajv)
             ajv.validate(rules, req.body)
             if (ajv.errors) {
                 throw new ValidationError(ajv.errors)
