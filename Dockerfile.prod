@@ -12,4 +12,4 @@ RUN npm run build
 
 USER node
 
-CMD [ "node", "dist/src/server.js" ]
+CMD [ "npm",  "run", "run-prod" ]
