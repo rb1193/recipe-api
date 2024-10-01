@@ -3,7 +3,7 @@ import RecipeModel from '../src/Recipes/RecipeModel'
 import { faker } from '@faker-js/faker'
 
 export const recipeFactory = Factory.define<RecipeModel>(({ onCreate, params }) => {
-    onCreate(async (recipe) => await RecipeModel.query().insert(recipe))
+    onCreate(async (recipe) => await RecipeModel.query().insert(recipe).returning('*'))
 
     return RecipeModel.fromJson({
         user_id: params.user_id,

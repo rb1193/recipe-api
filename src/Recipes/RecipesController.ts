@@ -1,9 +1,9 @@
 import {AuthenticatedRequest, PaginatedResponseRequest} from "../lib/Requests"
 import RecipeModel from "./RecipeModel"
 import ApiResource from "../lib/ApiResource"
-import RecipeSearch from "./RecipeSearch"
 import ModelCollection from '../lib/ModelCollection'
 import { scrapeRecipe } from '../lib/RecipeWebScraper'
+import knex from "../database"
 import { JSONSchema7 } from "json-schema"
 
 export const scrapeRequestSchema: JSONSchema7 = {
@@ -35,9 +35,11 @@ async function list(req: AuthenticatedRequest) {
 }
 
 async function search(req: AuthenticatedRequest & PaginatedResponseRequest) {
-    const hits = await RecipeSearch.byFulltext(req.query.query as string, req.user)
     const perPage = 10
-    const recipes = await req.user.$relatedQuery<RecipeModel>('recipes').findByIds(hits)
+    const recipes = await req.user.$relatedQuery<RecipeModel>('recipes')
+        .select(knex.raw('*, ts_rank(searchable_text, ?) AS rank', [req.query.query]))
+        .whereRaw(`searchable_text @@ websearch_to_tsquery(?)`, [req.query.query])
+        .orderBy('rank')
     const paginatedRecipes = ModelCollection.page(recipes, perPage, parseInt(req.query.page || '1', 10))
     return ApiResource.paginatedCollection<RecipeModel>(paginatedRecipes, perPage, req.query.page as string)
 }
