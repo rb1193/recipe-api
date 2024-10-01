@@ -1,4 +1,3 @@
-version: '3'
 services:
   nginx-proxy:
     depends_on: ['web']
@@ -15,7 +14,7 @@ services:
   web:
     image: node:18
     command: npm run start
-    depends_on: [database, search]
+    depends_on: [database]
     ports:
       - "9229:9229"
     user: "node"
@@ -28,7 +27,7 @@ services:
     expose:
       - 3000
   database:
-    image: postgres:latest
+    image: postgres:16
     restart: always
     environment:
       POSTGRES_DB: ${DATABASE_NAME}
@@ -38,6 +37,8 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    expose:
+      - 5432
 #  redis:
 #    image: redis:latest
 #    command: ["redis-server", "--appendonly", "yes"]
@@ -51,23 +52,5 @@ services:
 #    ports:
 #      - "1025:1025"
 #      - "8025:8025"
-  search:
-    image: elasticsearch:8.2.0
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
-      - xpack.security.enabled=true
-      - http.port=9200
-      - http.cors.allow-origin=http://localhost:1358
-      - http.cors.enabled=true
-      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
-      - http.cors.allow-credentials=true
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
 volumes:
-  esdata:
   pgdata:

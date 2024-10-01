@@ -5,10 +5,10 @@ const knexConfig: {[key: string]: any} = {
     development: {
         client: "postgresql",
         connection: {
-            host : Config.DATABASE_URL,
+            host: Config.DATABASE_URL,
             user : Config.DATABASE_USER,
             password : Config.DATABASE_PASSWORD,
-            database : 'postgres',
+            database : Config.DATABASE_NAME,
             port: 5432,
         },
         migrations: {

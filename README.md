@@ -6,8 +6,6 @@ To watch for changes use `npm run watch`.
 
 To run migrations open a bash terminal in the web container and run `npm run migrate`.
 
-To create the recipes search index run `docker-compose exec web npx ts-node src/cli.ts create-recipes-index`
-
 ## Deployment
 
 To deploy, push a docker container build with the "latest" tag. You should also push a semantic version of the build.
@@ -32,9 +30,7 @@ There are a handful of CLI commands used for administering the application. The 
 Available commands
 
 - `create-user {email} {password}`
-- `index-recipes`
 
 ## TODOS
 
 - Automate deployment process
-- Add servings data to recipes
