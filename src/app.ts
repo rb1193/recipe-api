@@ -4,6 +4,7 @@ import session from "express-session"
 import methodoverride from "method-override"
 import cors from "cors"
 import Config from './lib/Config'
+import knex from './database'
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { findUser, serializeUser, deserializeUser } from './Auth/UserProvider'
@@ -15,7 +16,7 @@ import RecipeModel from './Recipes/RecipeModel'
 import ApiResource, { PaginatedCollection, Item } from './lib/ApiResource'
 import { handleModelValidationError, handleRequestValidationError } from './lib/ErrorHandlers'
 import UserModel from './Users/UserModel'
-import connect from "connect-pg-simple"
+import { ConnectSessionKnexStore } from 'connect-session-knex'
 
 
 // Configure application
@@ -26,15 +27,7 @@ app.use(cors({ origin: Config.CORS_ORIGIN, credentials: true }))
 app.use(e.json())
 app.use(
     session({
-        store: new (connect(session))({
-            conObject: {
-                host : Config.DATABASE_URL,
-                user : Config.DATABASE_USER,
-                password : Config.DATABASE_PASSWORD,
-                database : Config.DATABASE_NAME,
-                port: 5432,
-            }
-        }),
+        store: new ConnectSessionKnexStore({ knex, tableName: 'session' }),
         secret: Config.COOKIE_SECRET || 'secret',
         resave: false,
         saveUninitialized: false,

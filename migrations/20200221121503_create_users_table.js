@@ -1,7 +1,5 @@
-import { Knex } from "knex";
 
-
-export async function up(knex: Knex): Promise<any> {
+exports.up = async function(knex) {
     return await knex.schema.withSchema('public').hasTable('users').then((exists) => {
         if (exists) new Error("Users table already exists")
     }).then(() => {
@@ -16,7 +14,7 @@ export async function up(knex: Knex): Promise<any> {
 }
 
 
-export async function down(knex: Knex): Promise<any> {
+exports.down = async function(knex) {
     return await knex.schema.withSchema('public').hasTable('users').then((exists) => {
         if (!exists) throw new Error('Users table does not exist')
     }).then(() => {

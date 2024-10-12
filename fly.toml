@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for recipe-rest-api on 2024-10-03T13:54:49+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'recipe-rest-api'
+primary_region = 'lhr'
+
+[build]
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[deploy]
+  release_command = "npm run migrate"
+
+[[vm]]
+  memory = '256mb'
+  cpu_kind = 'shared'
+  cpus = 1

@@ -3,7 +3,7 @@ import Config from './lib/Config'
 const knexConfig: {[key: string]: any} = {
 
     development: {
-        client: "postgresql",
+        client: 'pg',
         connection: {
             host: Config.DATABASE_URL,
             user : Config.DATABASE_USER,
@@ -17,19 +17,13 @@ const knexConfig: {[key: string]: any} = {
         },
         pool: {
             min: 0,
-            max: 1,
+            max: 2,
         }
     },
 
     production: {
-        client: "postgresql",
-        connection: {
-            host : Config.DATABASE_URL,
-            user : Config.DATABASE_USER,
-            password : Config.DATABASE_PASSWORD,
-            database : Config.DATABASE_NAME,
-            port: 5432,
-        },
+        client: 'pg',
+        connection: Config.DATABASE_URL,
         migrations: {
             directory: '../migrations',
             extension: 'ts'

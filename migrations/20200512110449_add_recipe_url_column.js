@@ -1,7 +1,5 @@
-import { Knex } from "knex";
 
-
-export async function up(knex: Knex): Promise<any> {
+exports.up = async function(knex) {
     return await knex.schema.withSchema('public').hasTable('recipes').then(() => {
         return knex.schema.withSchema('public').alterTable('recipes', function (table) {
             table.string('url', 255);
@@ -10,7 +8,7 @@ export async function up(knex: Knex): Promise<any> {
 }
 
 
-export async function down(knex: Knex): Promise<any> {
+exports.down = async function(knex) {
     return await knex.schema.withSchema('public').hasTable('recipes').then((exists) => {
         if (!exists) return;
         return knex.schema.withSchema('public').table('recipes', (table) => {
