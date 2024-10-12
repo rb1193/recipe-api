@@ -12,18 +12,20 @@ services:
     restart: always
 
   web:
-    image: node:18
+    build:
+      context: "."
+      target: "base"
     command: npm run dev
     depends_on: [database]
     ports:
       - "9229:9229"
     user: "node"
     volumes:
-      - ./:/home/node/app
-    working_dir: /home/node/app
+      - ./:/app
     environment:
       - VIRTUAL_HOST=local.recipes-api.arbee.me
       - VIRTUAL_PORT=3000
+      - NODE_ENV=development
     expose:
       - 3000
   database:

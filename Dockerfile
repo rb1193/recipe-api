@@ -10,7 +10,8 @@ LABEL fly_launch_runtime="Node.js"
 WORKDIR /app
 
 # Set production environment
-ENV NODE_ENV="production"
+ARG NODE_ENV="production"
+ENV NODE_ENV=${NODE_ENV}
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
