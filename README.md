@@ -19,3 +19,7 @@ There are a handful of CLI commands used for administering the application. The 
 Available commands
 
 - `create-user {email} {password}`
+
+## TODO
+
+Run tests in GitHub actions pipeline
