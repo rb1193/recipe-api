@@ -9,7 +9,7 @@ export const recipeFactory = Factory.define<RecipeModel>(({ onCreate, params }) 
         user_id: params.user_id,
         name: faker.lorem.sentence(),
         description: faker.lorem.paragraph(),
-        servings: faker.random.numeric(),
+        servings: faker.number.int(10).toString(),
         url: faker.internet.url(),
         method: faker.lorem.paragraph(),
         ingredients: faker.lorem.paragraph()
