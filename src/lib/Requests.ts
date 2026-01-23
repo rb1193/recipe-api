@@ -1,5 +1,5 @@
 import { Request } from "express";
-import UserModel from "../Users/UserModel"
+import UserModel from "../Users/UserModel.js"
 
 export interface AuthenticatedRequest extends Request {
     user: UserModel

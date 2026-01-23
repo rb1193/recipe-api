@@ -8,24 +8,29 @@ A TypeScript REST API for managing recipes, built with Express 5, Objection.js O
 
 ## Development Commands
 
+**Important:** Run all npm commands inside the Docker container using `docker compose exec web <command>`.
+
 ```bash
 # Build TypeScript to dist/
-npm run build
+docker compose exec web npm run build
 
 # Watch mode (rebuilds on changes)
-npm run watch
+docker compose exec web npm run watch
 
 # Run development server with hot reload (requires built dist/)
-npm run dev
+docker compose exec web npm run dev
 
 # Run tests (resets database, runs migrations, executes mocha tests)
-npm test
+docker compose exec web npm test
 
 # Run migrations
-npm run migrate
+docker compose exec web npm run migrate
 
 # Reset database and run migrations
-npm run migrate.fresh
+docker compose exec web npm run migrate.fresh
+
+# Install npm packages
+docker compose exec web npm install <package-name>
 ```
 
 ## Local Development Setup

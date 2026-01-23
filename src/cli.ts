@@ -1,7 +1,7 @@
-import commander from 'commander'
-import Config from './lib/Config'
-import createUserCommand from './Users/Commands/createUserCommand'
-import knexConfig from './knexfile'
+import { Command } from 'commander'
+import Config from './lib/Config.js'
+import createUserCommand from './Users/Commands/createUserCommand.js'
+import knexConfig from './knexfile.js'
 import Knex from 'knex'
 import { Model } from 'objection'
 
@@ -10,7 +10,7 @@ const knex = Knex(knexConfig[Config.APP_ENV || 'production'])
 Model.knex(knex)
 
 async function main() {
-    const program = new commander.Command()
+    const program = new Command()
 
     program.command('create-user <email> <password>')
         .description('Create the system user for the application')
@@ -22,3 +22,5 @@ async function main() {
 main().then(() => {
     process.exit()
 })
+
+export default main

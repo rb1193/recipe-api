@@ -1,5 +1,5 @@
 
-exports.up = async function(knex) {
+export async function up(knex) {
     return await knex.schema.withSchema('public').hasTable('session').then((exists) => {
         if (exists) return //throw new Error("Session table already exists")
     }).then(() => {
@@ -9,15 +9,15 @@ exports.up = async function(knex) {
               "expire" timestamp(6) NOT NULL
           )
           WITH (OIDS=FALSE);
-          
+
           ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
-          
+
           CREATE INDEX "IDX_session_expire" ON "session" ("expire");`)
     }).then(() => "Session table created")
 }
 
 
-exports.down = async function(knex) {
+export async function down(knex) {
     return await knex.schema.withSchema('public').hasTable('session').then((exists) => {
         if (!exists) throw new Error("Session table missing")
     }).then(() => {

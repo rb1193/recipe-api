@@ -1,8 +1,8 @@
-import { resolve } from "path"
+import { resolve, dirname } from "path"
 import { config } from "dotenv"
 
 //Load config
-const envPath = resolve(__dirname, "../../.env");
+const envPath = resolve(dirname("../../.env"));
 config({ path: envPath })
 
 type Config = {

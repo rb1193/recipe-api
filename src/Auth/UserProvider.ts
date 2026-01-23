@@ -1,5 +1,5 @@
 import { IVerifyOptions } from "passport-local"
-import UserModel from "../Users/UserModel"
+import UserModel from "../Users/UserModel.js"
 import bcrypt from "bcrypt"
 import { NotFoundError } from "objection"
 

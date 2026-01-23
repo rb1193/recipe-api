@@ -1,7 +1,7 @@
 import { describe } from "mocha";
-import { authenticate } from "../helpers";
+import { authenticate } from "../helpers.js";
 import request from "supertest"
-import app from "../../src/app"
+import app from "../../src/app.js"
 import assert from "assert"
 
 describe('The create recipe endpoint', () => {

@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt"
-import UserModel from "../src/Users/UserModel"
+import UserModel from "../src/Users/UserModel.js"
 import request from "supertest"
-import app from '../src/app';
+import app from '../src/app.js';
 
 export const authenticate = async () => {
     const password = "testpassword"

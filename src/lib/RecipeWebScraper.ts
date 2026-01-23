@@ -1,4 +1,4 @@
-import RecipeModel from '../Recipes/RecipeModel'
+import RecipeModel from '../Recipes/RecipeModel.js'
 import Objection from 'objection'
 import { HowToStep, Recipe, WithContext } from 'schema-dts'
 import fetch from 'node-fetch'

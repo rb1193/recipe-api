@@ -1,9 +1,9 @@
-import {AuthenticatedRequest, PaginatedResponseRequest} from "../lib/Requests"
-import RecipeModel from "./RecipeModel"
-import ApiResource from "../lib/ApiResource"
-import ModelCollection from '../lib/ModelCollection'
-import { scrapeRecipe } from '../lib/RecipeWebScraper'
-import knex from "../database"
+import {AuthenticatedRequest, PaginatedResponseRequest} from "../lib/Requests.js"
+import RecipeModel from "./RecipeModel.js"
+import ApiResource from "../lib/ApiResource.js"
+import ModelCollection from '../lib/ModelCollection.js'
+import { scrapeRecipe } from '../lib/RecipeWebScraper.js'
+import knex from "../database.js"
 import { JSONSchema7 } from "json-schema"
 
 export const scrapeRequestSchema: JSONSchema7 = {

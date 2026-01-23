@@ -1,5 +1,5 @@
 import { Factory } from 'fishery'
-import RecipeModel from '../src/Recipes/RecipeModel'
+import RecipeModel from '../src/Recipes/RecipeModel.js'
 import { faker } from '@faker-js/faker'
 
 export const recipeFactory = Factory.define<RecipeModel>(({ onCreate, params }) => {

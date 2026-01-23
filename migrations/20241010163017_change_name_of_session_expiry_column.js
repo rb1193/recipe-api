@@ -1,5 +1,5 @@
 
-exports.up = async function(knex) {
+export async function up(knex) {
     return await knex.schema.withSchema('public').hasTable('session').then((exists) => {
         return knex.schema.withSchema('public').raw(`
             DROP INDEX "IDX_session_expire";
@@ -9,7 +9,7 @@ exports.up = async function(knex) {
 }
 
 
-exports.down = async function(knex) {
+export async function down(knex) {
     return await knex.schema.withSchema('public').hasTable('session').then((exists) => {
         return knex.schema.withSchema('public').raw(`
             DROP INDEX "IDX_session_expired";

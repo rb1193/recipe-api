@@ -1,0 +1,6 @@
+{
+  "extension": ["ts"],
+  "spec": ["test/**/*.test.ts"],
+  "require": ["test/setup.ts", "test/hooks.ts"],
+  "node-option": ["import=tsx"]
+}

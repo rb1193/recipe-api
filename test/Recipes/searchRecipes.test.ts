@@ -1,8 +1,8 @@
 import { describe } from 'mocha'
 import supertest from 'supertest'
-import app from '../../src/app'
-import { recipeFactory } from '../factories'
-import { authenticate } from '../helpers'
+import app from '../../src/app.js'
+import { recipeFactory } from '../factories.js'
+import { authenticate } from '../helpers.js'
 import assert from 'assert'
 
 describe("The search recipes endpoint", () => {

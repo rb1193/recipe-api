@@ -1,5 +1,5 @@
 
-exports.up = async function(knex) {
+export async function up(knex) {
     return await knex.schema.withSchema('public').hasTable('users').then((exists) => {
         if (exists) new Error("Users table already exists")
     }).then(() => {
@@ -14,7 +14,7 @@ exports.up = async function(knex) {
 }
 
 
-exports.down = async function(knex) {
+export async function down(knex) {
     return await knex.schema.withSchema('public').hasTable('users').then((exists) => {
         if (!exists) throw new Error('Users table does not exist')
     }).then(() => {

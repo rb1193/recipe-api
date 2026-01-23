@@ -1,5 +1,9 @@
 import { Model } from "objection"
-import UserModel from "../Users/UserModel"
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 class RecipeModel extends Model
 {
@@ -11,7 +15,7 @@ class RecipeModel extends Model
         return {
             type: 'object',
             required: ['name', 'description'],
-        
+
             properties: {
                 id: { type: 'integer' },
                 user_id: { type: 'integer' },
@@ -25,7 +29,7 @@ class RecipeModel extends Model
             }
         };
     }
-    
+
     id!: number
     user_id!: number
     name!: string
@@ -36,13 +40,16 @@ class RecipeModel extends Model
     url?: string
     servings?: string
 
-    static relationMappings = {
-        owner: {
-            relation: Model.HasManyRelation,
-            modelClass: UserModel,
-            join: {
-                from: 'recipes.user_id',
-                to: 'users.id',
+    static get relationMappings() {
+        return {
+            owner: {
+                relation: Model.HasManyRelation,
+                // Use path string to avoid circular dependency
+                modelClass: join(__dirname, '..', 'Users', 'UserModel.js'),
+                join: {
+                    from: 'recipes.user_id',
+                    to: 'users.id',
+                }
             }
         }
     }

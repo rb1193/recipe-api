@@ -1,4 +1,4 @@
-import database from '../src/database'
+import database from '../src/database.js'
 
 export const mochaGlobalSetup = async () => {
     

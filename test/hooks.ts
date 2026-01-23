@@ -1,4 +1,4 @@
-import '../src/database'
+import '../src/database.js'
 import { transaction, Model, Transaction } from "objection";
 
 export const mochaHooks = () => {

@@ -1,4 +1,4 @@
-import Config from './lib/Config'
+import Config from './lib/Config.js'
 
 const knexConfig: {[key: string]: any} = {
 
@@ -36,6 +36,3 @@ const knexConfig: {[key: string]: any} = {
 }
 
 export default knexConfig
-
-// Export so that ts-node can use the knexfile during migrations
-module.exports = knexConfig

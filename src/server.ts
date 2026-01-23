@@ -1,5 +1,5 @@
-import app from './app';
-import db from './database';
+import app from './app.js';
+import db from './database.js';
 
 const server = app.listen(3000);
 

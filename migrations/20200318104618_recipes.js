@@ -1,5 +1,5 @@
 
-exports.up = async function(knex) {
+export async function up(knex) {
     return await knex.schema.withSchema('public').hasTable('recipes').then((exists) => {
         if (exists) return// throw new Error("Recipes table exists")
     }).then(() => {
@@ -17,7 +17,7 @@ exports.up = async function(knex) {
 }
 
 
-exports.down = async function(knex) {
+export async function down(knex) {
     return await knex.schema.withSchema('public').hasTable('recipes').then((exists) => {
         if (!exists) throw new Error("Recipes table missing")
     }).then(() => {

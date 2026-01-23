@@ -1,8 +1,8 @@
-import UserModel from '../src/Users/UserModel'
+import UserModel from '../src/Users/UserModel.js'
 import bcrypt from 'bcrypt'
 import request from 'supertest'
 import assert from 'assert'
-import app from '../src/app';
+import app from '../src/app.js';
 
 describe('The login endpoint', function () {
     const email = "test@test.com"

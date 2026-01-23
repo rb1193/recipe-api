@@ -3,19 +3,19 @@ import e from "express"
 import session from "express-session"
 import methodoverride from "method-override"
 import cors from "cors"
-import Config from './lib/Config'
-import knex from './database'
+import Config from './lib/Config.js'
+import knex from './database.js'
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
-import { findUser, serializeUser, deserializeUser } from './Auth/UserProvider'
+import { findUser, serializeUser, deserializeUser } from './Auth/UserProvider.js'
 import { ValidationError as AjvValidationError } from 'ajv'
 import { ValidationError, NotFoundError } from 'objection'
-import asyncProtectedRoute from './lib/asyncProtectedRoute'
-import RecipesController, { scrapeRequestSchema } from './Recipes/RecipesController'
-import RecipeModel from './Recipes/RecipeModel'
-import ApiResource, { PaginatedCollection, Item } from './lib/ApiResource'
-import { handleModelValidationError, handleRequestValidationError } from './lib/ErrorHandlers'
-import UserModel from './Users/UserModel'
+import asyncProtectedRoute from './lib/asyncProtectedRoute.js'
+import RecipesController, { scrapeRequestSchema } from './Recipes/RecipesController.js'
+import RecipeModel from './Recipes/RecipeModel.js'
+import ApiResource, { PaginatedCollection, Item } from './lib/ApiResource.js'
+import { handleModelValidationError, handleRequestValidationError } from './lib/ErrorHandlers.js'
+import UserModel from './Users/UserModel.js'
 import { ConnectSessionKnexStore } from 'connect-session-knex'
 
 
@@ -44,7 +44,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // Define routes
-app.options('*', () => cors())
+app.options('/{*path}', cors())
 
 app.post('/login', passport.authenticate('local'), (req: Request, res: Response) => {
     res.status(200).json(ApiResource.item(req.user as UserModel))

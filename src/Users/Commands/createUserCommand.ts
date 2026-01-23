@@ -1,4 +1,4 @@
-import UserModel from '../UserModel'
+import UserModel from '../UserModel.js'
 import { UniqueViolationError } from 'objection'
 import bcrypt from 'bcrypt'
 
