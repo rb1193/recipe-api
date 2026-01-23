@@ -63,16 +63,5 @@
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },
-  "exclude": ["./migrations", "./test"],
-  "ts-node": {
-    // It is faster to skip typechecking.
-    // Remove if you want ts-node to do typechecking.
-    "transpileOnly": true,
-    "esm": true,
-    "compilerOptions": {
-      "module": "NodeNext",
-      "moduleResolution": "NodeNext",
-      "typeRoots" : ["./node_modules/@types", "mocha", "./src/index.d.ts"]
-    }
-  },
+  "exclude": ["./migrations", "./test"]
 }

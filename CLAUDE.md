@@ -83,7 +83,7 @@ Tests use Mocha with Supertest for HTTP assertions.
 - `test/helpers.ts` - `authenticate()` helper creates user and returns session cookies
 - `test/factories.ts` - Test data factories using Fishery
 
-Run a single test file: `npm run migrate.fresh && npx mocha -r ts-node/register -r test/setup.ts -r test/hooks.ts test/path/to/file.test.ts`
+Run a single test file: `npm run migrate.fresh && node --import tsx ./node_modules/mocha/bin/mocha.js -r test/setup.ts -r test/hooks.ts test/path/to/file.test.ts`
 
 ## Deployment
 
