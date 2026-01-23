@@ -1,9 +1,7 @@
 import { Model } from "objection"
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { createRequire } from "module"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const require = createRequire(import.meta.url)
 
 class UserModel extends Model implements Express.User
 {
@@ -31,11 +29,13 @@ class UserModel extends Model implements Express.User
     profile_img_src!: string
 
     static get relationMappings() {
+        // Import inside getter to avoid circular dependency at module load time
+        // By the time this getter is called, all modules are fully initialized
+        const RecipeModel = require("../Recipes/RecipeModel.js").default
         return {
             recipes: {
                 relation: Model.HasManyRelation,
-                // Use path string to avoid circular dependency
-                modelClass: join(__dirname, '..', 'Recipes', 'RecipeModel.js'),
+                modelClass: RecipeModel,
                 join: {
                     from: 'users.id',
                     to: 'recipes.user_id',

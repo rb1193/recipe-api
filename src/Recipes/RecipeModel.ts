@@ -1,9 +1,7 @@
 import { Model } from "objection"
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { createRequire } from "module"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const require = createRequire(import.meta.url)
 
 class RecipeModel extends Model
 {
@@ -41,11 +39,13 @@ class RecipeModel extends Model
     servings?: string
 
     static get relationMappings() {
+        // Import inside getter to avoid circular dependency at module load time
+        // By the time this getter is called, all modules are fully initialized
+        const UserModel = require("../Users/UserModel.js").default
         return {
             owner: {
                 relation: Model.HasManyRelation,
-                // Use path string to avoid circular dependency
-                modelClass: join(__dirname, '..', 'Users', 'UserModel.js'),
+                modelClass: UserModel,
                 join: {
                     from: 'recipes.user_id',
                     to: 'users.id',

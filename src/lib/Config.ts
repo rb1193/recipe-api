@@ -1,8 +1,11 @@
-import { resolve, dirname } from "path"
+import { resolve, dirname, join } from "path"
+import { fileURLToPath } from "url"
 import { config } from "dotenv"
 
-//Load config
-const envPath = resolve(dirname("../../.env"));
+// Load config - resolve .env path relative to this file's location
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const envPath = resolve(__dirname, '../../.env')
 config({ path: envPath })
 
 type Config = {
