@@ -17,7 +17,7 @@ primary_region = 'lhr'
   processes = ['app']
 
 [deploy]
-  release_command = "npm run migrate"
+  release_command = "npm run migrate:prod"
 
 [[vm]]
   memory = '256mb'

@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc",
     "migrate": "node --import tsx ./node_modules/knex/bin/cli.js --knexfile='./src/knexfile.ts' migrate:latest",
+    "migrate:prod": "node ./node_modules/knex/bin/cli.js --knexfile='./dist/knexfile.js' migrate:latest",
     "migrate.fresh": "node --import tsx ./node_modules/knex/bin/cli.js --knexfile='./src/knexfile.ts' migrate:rollback --all && npm run migrate",
     "dev": "npx nodemon --inspect=0.0.0.0:9229 --watch dist dist/server.js",
     "start": "node dist/server.js",
