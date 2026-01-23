@@ -23,6 +23,7 @@ import { ConnectSessionKnexStore } from 'connect-session-knex'
 const app: Application = e()
 
 app.use(methodoverride('X-HTTP-Method-Override'))
+console.log("CORS origin", Config.CORS_ORIGIN)
 app.use(cors({ origin: Config.CORS_ORIGIN, credentials: true }))
 app.use(e.json())
 app.use(
@@ -43,7 +44,6 @@ passport.deserializeUser(deserializeUser)
 app.use(passport.initialize())
 app.use(passport.session())
 
-// Define routes
 app.options('/{*path}', cors())
 
 app.post('/login', passport.authenticate('local'), (req: Request, res: Response) => {

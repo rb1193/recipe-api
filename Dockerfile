@@ -1,8 +1,8 @@
 # syntax = docker/dockerfile:1
 
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.18.0
-FROM node:${NODE_VERSION}-slim as base
+ARG NODE_VERSION=24.13.0
+FROM node:${NODE_VERSION}-slim AS base
 
 LABEL fly_launch_runtime="Node.js"
 
@@ -14,7 +14,7 @@ ARG NODE_ENV="production"
 ENV NODE_ENV=${NODE_ENV}
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
